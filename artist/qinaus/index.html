@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qinaus — Artist Profile · Human ArtArk</title>
+<script src="data.js"></script>
+<style>
+.artark-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 40px;
+  background: rgba(10,10,10,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+.artark-nav-logo { font-family: Georgia, serif; font-size: 15px; color: #fafaf8; text-decoration: none; }
+.artark-nav-logo span { color: #c9a87c; }
+.artark-nav-right { display: flex; align-items: center; gap: 24px; }
+.artark-nav-link { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
+.artark-nav-link:hover { color: #fafaf8; }
+.artark-apply-btn {
+  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+  background: #c9a87c; color: #0a0a0a; text-decoration: none;
+  padding: 8px 20px; border-radius: 2px; transition: background 0.2s;
+}
+.artark-apply-btn:hover { background: #d4b88a; }
+body { padding-top: 52px; }
+</style>
+<style>
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black:        #0a0a0a;
+  --white:        #fafaf8;
+  --gray-light:   #f2f0ec;
+  --gray-mid:     #c8c4bc;
+  --gray-dark:    #6b6860;
+  --accent:       #8b0000;
+  --accent-light: #c9a87c;
+  --font-serif:   'Georgia', 'Times New Roman', serif;
+  --font-sans:    'Helvetica Neue', 'Arial', sans-serif;
+  --page-w:       210mm;
+  --page-h:       297mm;
+  --margin:       18mm;
+}
+
+html { background: #ccc; }
+body {
+  font-family: var(--font-sans);
+  color: var(--black);
+  background: #ccc;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── Page shell (screen) ── */
+.page {
+  width: var(--page-w);
+  min-height: var(--page-h);
+  background: var(--white);
+  margin: 12mm auto;
+  padding: var(--margin);
+  position: relative;
+  box-shadow: 0 4px 32px rgba(0,0,0,.18);
+  overflow: hidden;
+}
+
+/* ── Print ── */
+@media print {
+  html, body { background: white; }
+  .page {
+    margin: 0;
+    padding: var(--margin);
+    box-shadow: none;
+    page-break-before: always;
+    break-before: page;
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+  }
+  .page:first-child { page-break-before: avoid; break-before: avoid; }
+  .print-hint { display: none !important; }
+  .artwork-block,
+  .img-full,
+  .img-row,
+  .img-box,
+  .statement-pullquote { page-break-inside: avoid; break-inside: avoid; }
+  @page { size: A4; margin: 0; }
+}
+
+/* ── Cover ── */
+.cover {
+  display: flex; flex-direction: column; justify-content: space-between;
+  background: var(--black); color: var(--white); padding: var(--margin);
+}
+.cover-top { padding-top: 8mm; }
+.cover-rule { width: 40mm; height: 1px; background: var(--accent-light); margin-bottom: 8mm; }
+.cover-label {
+  font-size: 8pt; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--accent-light); margin-bottom: 5mm;
+}
+.cover-name {
+  font-family: var(--font-serif); font-size: 52pt; font-weight: 400;
+  line-height: 1; letter-spacing: -1px; color: var(--white); margin-bottom: 4mm;
+}
+.cover-subtitle {
+  font-family: var(--font-serif); font-size: 14pt; font-style: italic;
+  color: var(--gray-mid); margin-bottom: 10mm;
+}
+.cover-hero {
+  flex: 1; margin: 10mm -18mm; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100mm; background: #111;
+}
+.cover-hero img {
+  width: 100%; height: 120mm; object-fit: cover;
+  object-position: center; opacity: .85; display: block;
+}
+.cover-bottom {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding-top: 8mm; border-top: 1px solid #333;
+}
+.cover-meta { font-size: 8pt; color: var(--gray-mid); letter-spacing: 1px; line-height: 1.8; }
+.cover-meta strong { display: block; color: var(--white); font-size: 9pt; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1mm; }
+.cover-year { font-family: var(--font-serif); font-size: 28pt; color: #333; letter-spacing: -1px; }
+
+/* ── Page header ── */
+.page-header {
+  display: flex; align-items: baseline; gap: 6mm;
+  margin-bottom: 10mm; padding-bottom: 4mm;
+  border-bottom: 1px solid var(--gray-mid);
+}
+.page-num { font-size: 7pt; letter-spacing: 3px; text-transform: uppercase; color: var(--gray-dark); white-space: nowrap; }
+.page-title { font-family: var(--font-serif); font-size: 22pt; font-weight: 400; color: var(--black); flex: 1; }
+
+/* ── Statement ── */
+.statement-body { font-size: 10.5pt; line-height: 1.85; color: #2a2a2a; }
+.statement-body p { margin-bottom: 5mm; }
+.statement-pullquote {
+  font-family: var(--font-serif); font-size: 13pt; font-style: italic;
+  color: var(--accent); border-left: 3px solid var(--accent);
+  padding: 4mm 6mm; margin: 6mm 0; line-height: 1.5;
+}
+
+/* ── CV ── */
+.cv-section-title {
+  font-size: 7pt; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 4mm; padding-bottom: 1.5mm;
+  border-bottom: 1px solid var(--accent);
+}
+.cv-entries { margin-bottom: 8mm; }
+.cv-entry { display: flex; gap: 4mm; margin-bottom: 4mm; font-size: 8.5pt; line-height: 1.6; color: #2a2a2a; }
+.cv-year { min-width: 20mm; font-weight: 600; color: var(--black); font-size: 8pt; }
+.cv-detail { flex: 1; }
+
+/* ── Images ── */
+.img-full { width: calc(100% + 36mm); margin: 0 -18mm 6mm; background: var(--gray-light); }
+.img-full img { width: 100%; height: auto; display: block; }
+.img-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-bottom: 4mm; }
+.img-box { background: var(--gray-light); }
+.img-box img { width: 100%; height: auto; display: block; }
+
+/* ── Artwork captions ── */
+.artwork-block { margin-bottom: 8mm; }
+.artwork-title { font-family: var(--font-serif); font-size: 12pt; font-style: italic; color: var(--black); margin-top: 3mm; margin-bottom: 1mm; }
+.artwork-meta  { font-size: 7.5pt; letter-spacing: 1px; color: var(--gray-dark); text-transform: uppercase; margin-bottom: 2.5mm; }
+.artwork-desc  { font-size: 8.5pt; line-height: 1.75; color: #2a2a2a; }
+
+/* ── Sidebar layout ── */
+.sidebar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+.sidebar-right { display: flex; flex-direction: column; gap: 6mm; }
+
+/* ── Contact ── */
+.contact-page {
+  background: var(--black); color: var(--white);
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  text-align: center; min-height: var(--page-h);
+}
+.contact-name { font-family: var(--font-serif); font-size: 34pt; font-weight: 400; margin-bottom: 2mm; }
+.contact-role { font-size: 8.5pt; letter-spacing: 4px; text-transform: uppercase; color: var(--accent-light); margin-bottom: 14mm; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12mm; margin-bottom: 14mm; width: 100%; max-width: 140mm; }
+.contact-item-label { font-size: 7pt; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-light); margin-bottom: 3mm; }
+.contact-item-value { font-family: var(--font-serif); font-size: 9.5pt; color: var(--white); line-height: 1.5; font-style: italic; }
+.contact-divider { width: 40mm; height: 1px; background: #333; margin: 0 auto 10mm; }
+.contact-quote { font-family: Georgia, serif; font-size: 11pt; color: #888; font-style: italic; margin-bottom: 10mm; max-width: 120mm; }
+.contact-footer { font-size: 7.5pt; color: #555; letter-spacing: 2px; text-transform: uppercase; }
+
+/* ── Print hint (screen only) ── */
+.print-hint {
+  width: var(--page-w); margin: 0 auto 8mm;
+  background: #1a1a2e; color: #e0e0f0; border-radius: 6px;
+  padding: 12px 20px; font-family: var(--font-sans); font-size: 9pt;
+  display: flex; align-items: center; gap: 10px;
+}
+.print-hint strong { color: #fff; }
+.print-hint button {
+  margin-left: auto; background: var(--accent); color: white;
+  border: none; border-radius: 4px; padding: 6px 14px;
+  font-size: 8.5pt; cursor: pointer; letter-spacing: .5px;
+}
+</style>
+</head>
+<body>
+<nav class="artark-nav">
+  <a class="artark-nav-logo" href="../../">Human <span>ArtArk</span></a>
+  <div class="artark-nav-right">
+    <a class="artark-nav-link" href="../../galleries/">Galleries</a>
+    <a class="artark-apply-btn" href="../../apply/">Apply to Gallery</a>
+  </div>
+</nav>
+
+<div class="print-hint">
+  <span>📄 <strong>To save as PDF:</strong> File → Print → Destination: "Save as PDF" → Paper: A4 → Margins: None → Save</span>
+  <button onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<div id="portfolio"></div>
+
+<script>
+// ─────────────────────────────────────────────────────────
+// Helpers
+// ─────────────────────────────────────────────────────────
+
+function imgFull(url, alt) {
+  return `<div class="img-full"><img src="${url}" alt="${alt||''}" loading="eager"></div>`;
+}
+
+function imgBox(url, alt) {
+  return `<div class="img-box"><img src="${url}" alt="${alt||''}" loading="eager"></div>`;
+}
+
+function caption(a) {
+  return `
+    <div class="artwork-title">${a.title}</div>
+    <div class="artwork-meta">${a.meta}</div>
+    ${a.description ? `<div class="artwork-desc">${a.description}</div>` : ''}
+  `;
+}
+
+function header(label, num, total) {
+  const pad = n => String(n).padStart(2, '0');
+  return `<div class="page-header">
+    <span class="page-num">${pad(num)} / ${pad(total)}</span>
+    <h1 class="page-title">${label}</h1>
+  </div>`;
+}
+
+function cvSection(title, entries) {
+  return `
+    <div class="cv-section-title">${title}</div>
+    <div class="cv-entries">
+      ${entries.map(e => `
+        <div class="cv-entry">
+          <div class="cv-year">${e.years}</div>
+          <div class="cv-detail">${e.detail}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+// ─────────────────────────────────────────────────────────
+// Layout renderers
+// ─────────────────────────────────────────────────────────
+
+// Single full-bleed image + description below
+function renderHero(label, page, num, total) {
+  const a = page.artwork;
+  return `<div class="page">
+    ${header(label, num, total)}
+    ${imgFull(a.imageUrl, a.title)}
+    <div class="artwork-title">${a.title}</div>
+    <div class="artwork-meta">${a.meta}</div>
+    ${a.description ? `<div class="artwork-desc" style="margin-top:3mm">${a.description}</div>` : ''}
+  </div>`;
+}
+
+// Single full-bleed image + multi-column paragraph array
+function renderHeroMulticolumn(label, page, num, total) {
+  const a = page.artwork;
+  return `<div class="page">
+    ${header(label, num, total)}
+    ${imgFull(a.imageUrl, a.title)}
+    <div class="artwork-title">${a.title}</div>
+    <div class="artwork-meta">${a.meta}</div>
+    <div style="column-count:2;column-gap:8mm;margin-top:3mm">
+      ${a.paragraphs.map(p => `<p class="artwork-desc" style="margin-bottom:3mm">${p}</p>`).join('')}
+    </div>
+  </div>`;
+}
+
+// Two artworks side-by-side, then one full-width below (mark last as fullWidth:true)
+function renderGrid2Then1(label, page, num, total) {
+  const pair = page.artworks.filter(a => !a.fullWidth);
+  const full  = page.artworks.find(a =>  a.fullWidth);
+  return `<div class="page">
+    ${header(label, num, total)}
+    <div class="img-row">
+      ${pair.map(a => `<div class="artwork-block">${imgBox(a.imageUrl, a.title)}${caption(a)}</div>`).join('')}
+    </div>
+    ${full ? `<div class="artwork-block" style="margin-top:6mm">
+      <div class="img-box"><img src="${full.imageUrl}" alt="${full.title}" loading="eager"></div>
+      ${caption(full)}
+    </div>` : ''}
+  </div>`;
+}
+
+// 2 × 2 grid (pairs of artworks)
+function renderGrid2x2(label, page, num, total) {
+  const chunks = [];
+  for (let i = 0; i < page.artworks.length; i += 2)
+    chunks.push(page.artworks.slice(i, i + 2));
+  return `<div class="page">
+    ${header(label, num, total)}
+    ${chunks.map(row => `
+      <div class="img-row">
+        ${row.map(a => `<div class="artwork-block">${imgBox(a.imageUrl, a.title)}${caption(a)}</div>`).join('')}
+      </div>`).join('')}
+  </div>`;
+}
+
+// One full-width artwork (fullWidth:true) then two side-by-side
+function renderGrid1Full2(label, page, num, total) {
+  const full = page.artworks.find(a =>  a.fullWidth);
+  const pair = page.artworks.filter(a => !a.fullWidth);
+  return `<div class="page">
+    ${header(label, num, total)}
+    ${full ? `<div style="margin-bottom:6mm">
+      <div class="img-box"><img src="${full.imageUrl}" alt="${full.title}" loading="eager"></div>
+      ${caption(full)}
+    </div>` : ''}
+    <div class="img-row">
+      ${pair.map(a => `<div class="artwork-block">${imgBox(a.imageUrl, a.title)}${caption(a)}</div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// Tall artwork on left (tall:true) + stacked artworks on right
+function renderSidebar(label, page, num, total) {
+  const tall = page.artworks.find(a =>  a.tall);
+  const rest = page.artworks.filter(a => !a.tall);
+  return `<div class="page">
+    ${header(label, num, total)}
+    <div class="sidebar-grid">
+      <div class="artwork-block">${imgBox(tall.imageUrl, tall.title)}${caption(tall)}</div>
+      <div class="sidebar-right">
+        ${rest.map(a => `<div class="artwork-block">${imgBox(a.imageUrl, a.title)}${caption(a)}</div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+// Two side-by-side artworks then one full-width below (fullWidth:true)
+function renderGrid2Plus1Wide(label, page, num, total) {
+  const pair = page.artworks.filter(a => !a.fullWidth);
+  const full  = page.artworks.find(a =>  a.fullWidth);
+  return `<div class="page">
+    ${header(label, num, total)}
+    <div class="img-row" style="margin-bottom:4mm">
+      ${pair.map(a => `<div class="artwork-block">${imgBox(a.imageUrl, a.title)}${caption(a)}</div>`).join('')}
+    </div>
+    ${full ? `<div class="artwork-block">
+      <div class="img-box"><img src="${full.imageUrl}" alt="${full.title}" loading="eager"></div>
+      ${caption(full)}
+    </div>` : ''}
+  </div>`;
+}
+
+// ─────────────────────────────────────────────────────────
+// Main renderer
+// ─────────────────────────────────────────────────────────
+
+function render(data) {
+  const d = data;
+
+  // Total section count for page numbering
+  const seriesPageCount = d.series.reduce((sum, s) => sum + s.pages.length, 0);
+  const total = 3 + seriesPageCount + 1; // cover + statement + cv + series + contact
+
+  let n = 0;
+  const next = () => ++n;
+
+  // ── Cover ──────────────────────────────────────────────
+  next();
+  const cover = `<div class="page cover">
+    <div class="cover-top">
+      <div class="cover-rule"></div>
+      <div class="cover-label">Artist Portfolio</div>
+      <div class="cover-name">${d.artist.name}</div>
+      <div class="cover-subtitle">${d.artist.subtitle}</div>
+    </div>
+    <div class="cover-hero">
+      <img src="${d.cover.imageUrl}" alt="${d.artist.name}" loading="eager">
+    </div>
+    <div class="cover-bottom">
+      <div class="cover-meta">
+        <strong>${d.artist.location}</strong>
+        ${d.artist.website} · ${d.artist.instagram}<br>${d.artist.email}
+      </div>
+      <div class="cover-year">${d.artist.year}</div>
+    </div>
+  </div>`;
+
+  // ── Statement ──────────────────────────────────────────
+  const stmtNum = next();
+  const statement = `<div class="page">
+    ${header('Artist Statement', stmtNum, total)}
+    <div class="statement-body">
+      ${d.statement.paragraphs.map(p => `<p>${p}</p>`).join('')}
+      <div class="statement-pullquote">${d.statement.pullquote}</div>
+      <p>${d.statement.closing}</p>
+    </div>
+  </div>`;
+
+  // ── CV ─────────────────────────────────────────────────
+  const cvNum = next();
+  const cv = `<div class="page">
+    ${header('CV', cvNum, total)}
+    <div style="margin-top:4mm">
+      ${cvSection('Education',              d.cv.education)}
+      ${cvSection('Exhibitions',            d.cv.exhibitions)}
+      ${cvSection('Studio',                 d.cv.studios)}
+      ${cvSection('Professional Background',d.cv.professional)}
+    </div>
+  </div>`;
+
+  // ── Series pages ───────────────────────────────────────
+  const layouts = {
+    'hero':             renderHero,
+    'hero-multicolumn': renderHeroMulticolumn,
+    'grid-2-then-1':    renderGrid2Then1,
+    'grid-2x2':         renderGrid2x2,
+    'grid-1full+2':     renderGrid1Full2,
+    'sidebar':          renderSidebar,
+    'grid-2+1wide':     renderGrid2Plus1Wide
+  };
+
+  const seriesPages = d.series.flatMap(series =>
+    series.pages.map((page, i) => {
+      const label = `Series ${series.num} — ${series.name}${i > 0 ? ' (continued)' : ''}`;
+      const fn = layouts[page.layout];
+      if (!fn) return `<div class="page"><p style="padding:10mm;color:red">Unknown layout: ${page.layout}</p></div>`;
+      return fn(label, page, next(), total);
+    })
+  );
+
+  // ── Contact ────────────────────────────────────────────
+  next();
+  const contact = `<div class="page contact-page">
+    <div class="cover-rule" style="margin:0 auto 8mm"></div>
+    <div class="contact-name">${d.artist.name}</div>
+    <div class="contact-role">${d.artist.subtitle} · ${d.artist.location}</div>
+    <div class="contact-grid">
+      <div><div class="contact-item-label">Website</div><div class="contact-item-value">${d.artist.website}</div></div>
+      <div><div class="contact-item-label">Email</div><div class="contact-item-value">${d.artist.email}</div></div>
+      <div><div class="contact-item-label">Instagram</div><div class="contact-item-value">${d.artist.instagram}</div></div>
+    </div>
+    <div class="contact-divider"></div>
+    <div class="contact-quote">"${d.artist.quote}"</div>
+    <div class="contact-footer">SF Artists Studios · Dogpatch · ${d.artist.location} · ${d.artist.year}</div>
+  </div>`;
+
+  return cover + statement + cv + seriesPages.join('') + contact;
+}
+
+document.getElementById('portfolio').innerHTML = render(PORTFOLIO);
+</script>
+</body>
+</html>
