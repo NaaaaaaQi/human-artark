@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hannah Weiss — Human ArtArk</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black: #000; --white: #fff;
+  --gray-100: #f8f8f8; --gray-200: #e8e8e8;
+  --gray-400: #999; --gray-600: #555;
+  --font-serif: 'Georgia','Times New Roman',serif;
+  --font-sans: 'Helvetica Neue','Helvetica','Arial',sans-serif;
+}
+body { font-family: var(--font-sans); color: var(--black); background: var(--white); -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 56px;
+       background: var(--white); border-bottom: 1px solid var(--gray-200);
+       display: flex; align-items: center; padding: 0 32px; }
+.nav-logo { font-family: var(--font-serif); font-size: 17px; font-weight: normal; margin-right: auto; }
+.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-links a { font-size: 13px; color: var(--gray-600); transition: color 0.15s; }
+.nav-links a:hover { color: var(--black); }
+.nav-cta { font-size: 13px !important; font-weight: 600; color: var(--white) !important;
+           background: var(--black); padding: 8px 18px; transition: opacity 0.15s; }
+.nav-cta:hover { opacity: 0.75; }
+
+.breadcrumb { margin-top: 56px; padding: 18px 80px; border-bottom: 1px solid var(--gray-200);
+               font-size: 12px; color: var(--gray-400); }
+.breadcrumb a { color: var(--gray-400); }
+.breadcrumb a:hover { color: var(--black); }
+.breadcrumb span { margin: 0 8px; }
+
+.hero { display: grid; grid-template-columns: 340px 1fr; border-bottom: 1px solid var(--gray-200); }
+.hero-portrait { position: relative; overflow: hidden; background: var(--gray-100); }
+.hero-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: center top; min-height: 480px; }
+.medium-badge { position: absolute; bottom: 16px; left: 16px;
+                 font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+                 color: var(--white); background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); padding: 5px 12px; }
+.hero-info { padding: 64px 72px; display: flex; flex-direction: column; justify-content: space-between; }
+.hero-name { font-family: var(--font-serif); font-size: clamp(40px,5vw,68px);
+              font-weight: normal; letter-spacing: -0.02em; margin-bottom: 8px; line-height: 1; }
+.hero-medium { font-size: 15px; color: var(--gray-600); margin-bottom: 6px; }
+.hero-location { font-size: 13px; color: var(--gray-400); margin-bottom: 36px; }
+.hero-bio { font-size: 15px; line-height: 1.75; color: var(--gray-800, #222); max-width: 560px; margin-bottom: 48px; }
+.hero-actions { display: flex; gap: 14px; }
+.btn-primary { font-size: 13px; font-weight: 600; color: var(--white); background: var(--black);
+                padding: 12px 28px; border: 1px solid var(--black); transition: opacity 0.15s; }
+.btn-primary:hover { opacity: 0.75; }
+.btn-secondary { font-size: 13px; color: var(--black); background: var(--white);
+                  padding: 12px 28px; border: 1px solid var(--black); transition: background 0.15s; }
+.btn-secondary:hover { background: var(--gray-100); }
+
+.section { padding: 64px 80px; border-bottom: 1px solid var(--gray-200); }
+.section-title { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+                  color: var(--gray-400); margin-bottom: 32px; font-weight: 600; }
+.works-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--gray-200); }
+.work-item { background: var(--white); overflow: hidden; cursor: pointer; }
+.work-item img { width: 100%; aspect-ratio: 1; object-fit: cover; transition: transform 0.4s ease; }
+.work-item:hover img { transform: scale(1.04); }
+.work-caption { padding: 12px 14px 16px; font-size: 12px; color: var(--gray-600); }
+
+.cv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 80px; }
+.cv-list { list-style: none; }
+.cv-list li { display: flex; gap: 24px; padding: 14px 0; border-bottom: 1px solid var(--gray-200); font-size: 14px; }
+.cv-list li:last-child { border-bottom: none; }
+.cv-year { color: var(--gray-400); min-width: 40px; font-variant-numeric: tabular-nums; }
+.cv-edu { font-size: 14px; color: var(--gray-600); margin-top: 8px; }
+
+footer { padding: 40px 80px; display: flex; justify-content: space-between; align-items: center;
+          border-top: 1px solid var(--gray-200); font-family: var(--font-serif); font-size: 15px; }
+.footer-links { display: flex; gap: 28px; }
+.footer-links a { font-family: var(--font-sans); font-size: 12px; color: var(--gray-600); transition: color 0.15s; }
+.footer-links a:hover { color: var(--black); }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-info { padding: 40px 24px; }
+  .section { padding: 48px 24px; }
+  .works-grid { grid-template-columns: repeat(2,1fr); }
+  .cv-grid { grid-template-columns: 1fr; }
+  .breadcrumb { padding: 18px 24px; }
+  footer { padding: 32px 24px; flex-direction: column; gap: 16px; align-items: flex-start; }
+  .nav { padding: 0 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/human-artark/">Human ArtArk</a>
+  <div class="nav-links">
+    <a href="/human-artark/galleries/">Galleries</a>
+    <a href="/human-artark/artists/">Artists</a>
+    <a href="/human-artark/apply/">Apply</a>
+    <a class="nav-cta" href="/human-artark/apply/?artist=hannah-weiss">Apply to Gallery</a>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <a href="/human-artark/">Home</a><span>›</span>
+  <a href="/human-artark/artists/">Artists</a><span>›</span>
+  Hannah Weiss
+</div>
+
+<div class="hero">
+  <div class="hero-portrait">
+    <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&h=1000&q=80" alt="Hannah Weiss" loading="eager" />
+    <span class="medium-badge">Printmaking</span>
+  </div>
+  <div class="hero-info">
+    <div>
+      <h1 class="hero-name">Hannah Weiss</h1>
+      <div class="hero-medium">Printmaking · Collage</div>
+      <div class="hero-location">San Francisco, CA</div>
+      <p class="hero-bio">Hannah Weiss uses the systematic logic of printmaking — registration, repetition, layering — as both method and metaphor. Her linocuts and screen prints are assembled into large collaged works that examine systems of classification, archival failure, and the instability of documentary evidence.</p>
+    </div>
+    <div class="hero-actions">
+      <a class="btn-primary" href="/human-artark/apply/?artist=hannah-weiss">Apply to Gallery</a>
+      <a class="btn-secondary" href="/human-artark/artists/">← All Artists</a>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Selected Works</div>
+  <div class="works-grid">
+    <div class="work-item">
+      <img loading="lazy" src="https://picsum.photos/seed/hweiss-linocut/600/600" alt="Linocut Series No.1" />
+      <div class="work-caption">Linocut Series No.1</div>
+    </div>
+    <div class="work-item">
+      <img loading="lazy" src="https://picsum.photos/seed/hweiss-screen/600/600" alt="Screen Print Study" />
+      <div class="work-caption">Screen Print Study</div>
+    </div>
+    <div class="work-item">
+      <img loading="lazy" src="https://picsum.photos/seed/hweiss-collage/600/600" alt="Collage No.22" />
+      <div class="work-caption">Collage No.22</div>
+    </div>
+    <div class="work-item">
+      <img loading="lazy" src="https://picsum.photos/seed/hweiss-regist/600/600" alt="Register Shift" />
+      <div class="work-caption">Register Shift</div>
+    </div>
+    <div class="work-item">
+      <img loading="lazy" src="https://picsum.photos/seed/hweiss-error/600/600" alt="Archive Error" />
+      <div class="work-caption">Archive Error</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">CV</div>
+  <div class="cv-grid">
+    <div>
+      <div class="section-title" style="margin-bottom:16px;">Exhibitions</div>
+      <ul class="cv-list">
+        <li><span class="cv-year">2026</span><span>SFWA Gallery — Group Show: Impression</span></li>
+        <li><span class="cv-year">2025</span><span>Kala Art Institute — Resident Exhibition</span></li>
+        <li><span class="cv-year">2024</span><span>SOMArts — Paper Works</span></li>
+        <li><span class="cv-year">2023</span><span>Pro Arts — East Bay Print</span></li>
+        <li><span class="cv-year">2022</span><span>Kala Art Institute — Open Print</span></li>
+      </ul>
+    </div>
+    <div>
+      <div class="section-title" style="margin-bottom:16px;">Education</div>
+      <p class="cv-edu">BFA Printmaking, California College of the Arts, 2019</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>Human ArtArk</span>
+  <div class="footer-links">
+    <a href="/human-artark/">Home</a>
+    <a href="/human-artark/galleries/">Galleries</a>
+    <a href="/human-artark/artists/">Artists</a>
+    <a href="/human-artark/apply/">Apply</a>
+  </div>
+</footer>
+
+</body>
+</html>
