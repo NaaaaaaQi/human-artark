@@ -86,6 +86,48 @@ footer { padding: 40px 80px; display: flex; justify-content: space-between; alig
   footer { padding: 32px 24px; flex-direction: column; gap: 16px; align-items: flex-start; }
   .nav { padding: 0 20px; }
 }
+
+/* Agent section */
+.agent-section { background: #000; color: #fff; padding: 56px 80px;
+                 border-bottom: 1px solid #222; }
+.agent-header { display: flex; justify-content: space-between; align-items: flex-start;
+                margin-bottom: 36px; flex-wrap: wrap; gap: 16px; }
+.agent-title-group {}
+.agent-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+               color: rgba(255,255,255,0.35); margin-bottom: 8px; }
+.agent-title { font-family: var(--font-serif); font-size: 22px; font-weight: normal; }
+.agent-pulse { display: flex; align-items: center; gap: 8px; font-size: 12px;
+               color: rgba(255,255,255,0.4); }
+.agent-pulse-dot { width: 7px; height: 7px; border-radius: 50%; background: #1aaa55;
+                   animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+.agent-matches { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px;
+                 background: #1a1a1a; margin-bottom: 24px; }
+.agent-match { background: #0a0a0a; padding: 24px; }
+.agent-match-rank { font-size: 11px; color: rgba(255,255,255,0.25);
+                    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.agent-match-name { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+.agent-match-score { display: inline-block; font-size: 11px; letter-spacing: 0.06em;
+                     color: #1aaa55; border: 1px solid #1aaa55; padding: 2px 8px;
+                     margin-bottom: 10px; }
+.agent-match-reason { font-size: 12px; color: rgba(255,255,255,0.5);
+                      line-height: 1.6; margin-bottom: 8px; }
+.agent-match-call { font-size: 11px; color: rgba(255,255,255,0.3);
+                    border-left: 2px solid #333; padding-left: 10px; }
+.agent-apply-btn { display: inline-block; font-size: 11px; letter-spacing: 0.08em;
+                   text-transform: uppercase; color: #000; background: #fff;
+                   padding: 8px 18px; margin-top: 14px; transition: opacity 0.15s; }
+.agent-apply-btn:hover { opacity: 0.8; }
+.agent-footer { display: flex; justify-content: space-between; align-items: center;
+                font-size: 11px; color: rgba(255,255,255,0.25); flex-wrap: wrap; gap: 8px; }
+.agent-footer a { color: rgba(255,255,255,0.4); border-bottom: 1px solid rgba(255,255,255,0.15);
+                  padding-bottom: 1px; transition: color 0.15s; }
+.agent-footer a:hover { color: #fff; }
+@media (max-width: 900px) {
+  .agent-section { padding: 48px 24px; }
+  .agent-matches { grid-template-columns: 1fr; }
+}
+
 </style>
 </head>
 <body>
@@ -155,6 +197,50 @@ footer { padding: 40px 80px; display: flex; justify-content: space-between; alig
   </div>
 </div>
 
+
+<!-- AGENT SECTION -->
+<div class="agent-section">
+  <div class="agent-header">
+    <div class="agent-title-group">
+      <div class="agent-label">Your Artist Agent</div>
+      <div class="agent-title">This week's matched opportunities</div>
+    </div>
+    <div class="agent-pulse">
+      <span class="agent-pulse-dot"></span>
+      Active · scans galleries every Monday
+    </div>
+  </div>
+  <div class="agent-matches">
+    <div class="agent-match">
+      <div class="agent-match-rank">Match 1 of 3</div>
+      <div class="agent-match-name">Kala Art Institute</div>
+      <span class="agent-match-score">Fit 9/10</span>
+      <div class="agent-match-reason">Ceramics and print residency programming — Kala supports material-based practices across media.</div>
+      <div class="agent-match-call">📋 Resident artist applications open</div>
+      <a class="agent-apply-btn" href="/human-artark/apply/?gallery=Kala Art Institute">Apply →</a>
+    </div>
+    <div class="agent-match">
+      <div class="agent-match-rank">Match 2 of 3</div>
+      <div class="agent-match-name">Berkeley Art Center</div>
+      <span class="agent-match-score">Fit 9/10</span>
+      <div class="agent-match-reason">Strong history of ceramics and craft exhibitions in Berkeley — natural home for vessel work.</div>
+      <div class="agent-match-call">📋 Group show proposals open</div>
+      <a class="agent-apply-btn" href="/human-artark/apply/?gallery=Berkeley Art Center">Apply →</a>
+    </div>
+    <div class="agent-match">
+      <div class="agent-match-rank">Match 3 of 3</div>
+      <div class="agent-match-name">Aggregate Space Gallery</div>
+      <span class="agent-match-score">Fit 7/10</span>
+      <div class="agent-match-reason">Contemporary program open to ceramics alongside painting and sculpture.</div>
+      <div class="agent-match-call">📋 Solo and group show proposals open</div>
+      <a class="agent-apply-btn" href="/human-artark/apply/?gallery=Aggregate Space Gallery">Apply →</a>
+    </div>
+  </div>
+  <div class="agent-footer">
+    <span>Last scan: Jun 11, 2026 · Next: Jun 18, 2026 · 22 open calls monitored</span>
+    <a href="/human-artark/galleries/">Browse all open calls →</a>
+  </div>
+</div>
 <div class="section">
   <div class="section-title">CV</div>
   <div class="cv-grid">

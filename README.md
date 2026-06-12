@@ -3,6 +3,50 @@
 > *In an age of infinite AI images, Human ArtArk is where real artists grow — and where you get to watch.*
 
 🌐 **Live demo:** [naaaaaaqi.github.io/human-artark](https://naaaaaaqi.github.io/human-artark/)
+🤖 **Artist Agent:** [github.com/NaaaaaaQi/my-gallery-agent](https://github.com/NaaaaaaQi/my-gallery-agent)
+
+---
+
+## The Artist Agent
+
+Every artist on Human ArtArk has a personal AI agent.
+
+```
+Artist Profile (medium, location, goals, history)
+        +
+Live Gallery Database (70+ galleries, weekly scans)
+        ↓
+  Claude matches artist → open calls by fit score
+        ↓
+  Drafts personalized application letters
+        ↓
+  Pushes to artist via Telegram every Monday
+```
+
+**Demo output — Sofia Reyes's agent this week:**
+
+> 🎨 Human ArtArk — Weekly Opportunities
+> Sofia Reyes · Painting, Drawing · San Francisco, CA
+>
+> 5 galleries match your work:
+>
+> 1. Mercury 20 Gallery (fit: 9/10)
+>    Artist-run cooperative welcoming Latinx figurative narrative work.
+>    📋 Open membership + 'Beyond Boundaries' juried show
+>
+> 2. Gray Loft Gallery (fit: 9/10)
+>    Award-winning Oakland gallery, emerging-artist focus.
+>    📋 Annual color-theme juried call for entry
+>
+> [Draft application letters attached — reply SEND to submit]
+
+The agent knows Sofia's exhibition history, which galleries she's already applied to, and her specific goals — and never surfaces a gallery that's a bad fit.
+
+Run it yourself:
+```bash
+cd my-gallery-agent
+ANTHROPIC_API_KEY=sk-ant-... python3 scripts/artist_agent.py --artist sofia-reyes
+```
 
 ---
 
