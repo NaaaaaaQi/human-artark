@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Artists — Human ArtArk</title>
 <style>
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --black: #000; --white: #fff; --gray-100: #f8f8f8;
-  --gray-200: #e8e8e8; --gray-400: #999; --gray-600: #555; --gray-800: #222;
+  --black: #000; --white: #fff;
+  --gray-100: #f8f8f8; --gray-200: #e8e8e8;
+  --gray-400: #999; --gray-600: #555; --gray-800: #222;
   --font-serif: 'Georgia','Times New Roman',serif;
   --font-sans:  'Helvetica Neue','Helvetica','Arial',sans-serif;
 }
@@ -19,116 +19,102 @@ body { font-family: var(--font-sans); color: var(--black); background: var(--whi
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 
-/* NAV */
 .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 56px;
        background: var(--white); border-bottom: 1px solid var(--gray-200);
        display: flex; align-items: center; padding: 0 32px; }
-.nav-logo { font-family: var(--font-serif); font-size: 17px; font-weight: normal;
-            letter-spacing: 0.01em; margin-right: auto; }
+.nav-logo { font-family: var(--font-serif); font-size: 17px; font-weight: normal; margin-right: auto; }
 .nav-links { display: flex; align-items: center; gap: 28px; }
 .nav-links a { font-size: 13px; color: var(--gray-600); transition: color 0.15s; }
-.nav-links a:hover { color: var(--black); }
+.nav-links a:hover, .nav-links a.active { color: var(--black); font-weight: 500; }
 .nav-cta { font-size: 13px !important; font-weight: 600; color: var(--white) !important;
            background: var(--black); padding: 8px 18px !important; transition: opacity 0.15s; }
 .nav-cta:hover { opacity: 0.75; }
 
-/* BUTTONS */
-.btn-primary { font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
-               background: var(--black); color: var(--white); padding: 14px 28px;
-               transition: opacity 0.15s; display: inline-block; }
-.btn-primary:hover { opacity: 0.75; }
-.btn-outline { font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
-               background: var(--white); color: var(--black); padding: 13px 28px;
-               border: 1px solid var(--black); transition: all 0.15s; display: inline-block; }
-.btn-outline:hover { background: var(--black); color: var(--white); }
-.btn-text { font-size: 13px; color: var(--gray-600); border-bottom: 1px solid var(--gray-400);
-            padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; display: inline-block; }
-.btn-text:hover { color: var(--black); border-color: var(--black); }
-
-/* OPEN DOT */
-.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
-.dot.open { background: #1aaa55; }
-.dot.closed { background: var(--gray-400); }
-.dot.unknown { background: var(--gray-400); }
-
-@media (max-width: 768px) {
-  .nav { padding: 0 20px; }
-  .nav-links { gap: 16px; }
-}
-
-
 .page-header {
-  margin-top: 56px;
-  padding: 72px 80px 48px;
+  margin-top: 56px; padding: 72px 80px 48px;
   border-bottom: 1px solid var(--gray-200);
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 40px;
 }
-.page-header h1 {
-  font-family: var(--font-serif); font-size: clamp(36px,4vw,56px);
-  font-weight: normal; letter-spacing: -0.02em; margin-bottom: 12px;
-}
-.page-header p { font-size: 14px; color: var(--gray-600); line-height: 1.6; max-width: 520px; }
+.page-header h1 { font-family: var(--font-serif); font-size: clamp(36px,4vw,56px);
+                  font-weight: normal; letter-spacing: -0.02em; margin-bottom: 12px; }
+.page-header p { font-size: 14px; color: var(--gray-600); line-height: 1.65; max-width: 480px; }
+.header-meta { font-size: 13px; color: var(--gray-400); white-space: nowrap; align-self: flex-end; }
 
-.artists-grid {
-  display: grid; grid-template-columns: repeat(3,1fr);
-  max-width: 1400px; margin: 0 auto;
-  border-bottom: 1px solid var(--gray-200);
+.filter-bar {
+  position: sticky; top: 56px; z-index: 100;
+  background: var(--white); border-bottom: 1px solid var(--gray-200);
+  padding: 0 80px; display: flex; overflow-x: auto;
 }
+.filter-tab {
+  font-size: 13px; color: var(--gray-400); padding: 14px 20px;
+  border: none; border-bottom: 2px solid transparent;
+  background: none; cursor: pointer; white-space: nowrap;
+  font-family: var(--font-sans); transition: color 0.15s, border-color 0.15s;
+}
+.filter-tab:hover { color: var(--black); }
+.filter-tab.active { color: var(--black); border-bottom-color: var(--black); }
+
+.artists-grid { display: grid; grid-template-columns: repeat(4,1fr); }
+
 .artist-card {
   border-right: 1px solid var(--gray-200);
   border-bottom: 1px solid var(--gray-200);
-  cursor: pointer; transition: opacity 0.2s;
-  overflow: hidden;
+  overflow: hidden; display: flex; flex-direction: column; cursor: pointer;
 }
-.artist-card:hover { opacity: 0.88; }
-.artist-card:nth-child(3n) { border-right: none; }
+.artist-card:nth-child(4n) { border-right: none; }
+.artist-card:hover .portrait-img { transform: scale(1.04); }
+.artist-card:hover .card-name { text-decoration: underline; }
 
-.artist-cover {
-  width: 100%; aspect-ratio: 3/4; overflow: hidden;
-  background: var(--gray-100);
+.artist-portrait { position: relative; aspect-ratio: 3/4; overflow: hidden; background: var(--gray-100); }
+.portrait-img { width: 100%; height: 100%; object-fit: cover; object-position: center top;
+                transition: transform 0.5s ease; }
+.medium-tag {
+  position: absolute; bottom: 12px; left: 12px;
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+  color: var(--white); background: rgba(0,0,0,0.55); backdrop-filter: blur(4px); padding: 4px 10px;
 }
-.artist-cover img {
-  width: 100%; height: 100%; object-fit: cover; object-position: center top;
-  display: block; transition: transform 0.4s;
-}
-.artist-card:hover .artist-cover img { transform: scale(1.03); }
 
-.artist-works {
-  display: grid; grid-template-columns: repeat(3,1fr);
-  border-top: 1px solid var(--gray-200);
-  border-bottom: 1px solid var(--gray-200);
-}
-.artist-works img {
-  width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--gray-100);
-  border-right: 1px solid var(--gray-200);
-}
-.artist-works img:last-child { border-right: none; }
+.works-strip { display: grid; grid-template-columns: repeat(3,1fr); border-top: 1px solid var(--gray-200); }
+.works-strip img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--gray-100);
+                   border-right: 1px solid var(--gray-200); transition: opacity 0.2s; }
+.works-strip img:last-child { border-right: none; }
+.artist-card:hover .works-strip img { opacity: 0.82; }
 
-.artist-info { padding: 18px 20px 24px; }
-.artist-name { font-size: 16px; font-weight: 600; margin-bottom: 3px; }
-.artist-medium { font-size: 13px; color: var(--gray-600); margin-bottom: 2px; }
-.artist-location { font-size: 12px; color: var(--gray-400); margin-bottom: 8px; }
-.artist-style {
-  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--gray-400); margin-bottom: 8px;
-}
-.artist-exh { font-size: 12px; color: var(--gray-600); }
+.artist-info { padding: 16px 18px 22px; border-top: 1px solid var(--gray-200); flex: 1; }
+.card-name { font-size: 15px; font-weight: 600; margin-bottom: 3px; line-height: 1.2; }
+.card-medium { font-size: 13px; color: var(--gray-600); margin-bottom: 2px; }
+.card-location { font-size: 12px; color: var(--gray-400); margin-bottom: 10px; }
+.card-exh { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray-400); }
+
+/* featured — spans 2 cols */
+.artist-card.featured { grid-column: span 2; border-right: 1px solid var(--gray-200); }
+.artist-card.featured .artist-portrait { aspect-ratio: unset; min-height: 520px; }
+.artist-card.featured .card-name { font-size: 20px; }
+.artist-card.featured .card-medium { font-size: 14px; }
+.artist-card.featured .works-strip img { aspect-ratio: unset; height: 130px; }
 
 footer { padding: 40px 80px; display: flex; justify-content: space-between; align-items: center;
-          border-top: 1px solid var(--gray-200); font-family: var(--font-serif); font-size: 15px; }
-footer .footer-links { display: flex; gap: 28px; }
-footer .footer-links a { font-family: var(--font-sans); font-size: 12px; color: var(--gray-600); transition: color 0.15s; }
-footer .footer-links a:hover { color: var(--black); }
+         border-top: 1px solid var(--gray-200); font-family: var(--font-serif); font-size: 15px; }
+.footer-links { display: flex; gap: 28px; }
+.footer-links a { font-family: var(--font-sans); font-size: 12px; color: var(--gray-600); transition: color 0.15s; }
+.footer-links a:hover { color: var(--black); }
 
-@media (max-width: 960px) {
-  .artists-grid { grid-template-columns: repeat(2,1fr); }
-  .artist-card:nth-child(3n) { border-right: 1px solid var(--gray-200); }
-  .artist-card:nth-child(2n) { border-right: none; }
-  .page-header { padding: 48px 24px 32px; }
-  footer { padding: 32px 24px; flex-direction: column; gap: 16px; }
+@media (max-width: 1100px) {
+  .artists-grid { grid-template-columns: repeat(3,1fr); }
+  .artist-card:nth-child(4n) { border-right: 1px solid var(--gray-200); }
+  .artist-card:nth-child(3n) { border-right: none; }
+  .artist-card.featured { grid-column: span 2; }
 }
-@media (max-width: 600px) {
-  .artists-grid { grid-template-columns: 1fr; }
+@media (max-width: 768px) {
+  .page-header { padding: 48px 24px 32px; flex-direction: column; align-items: flex-start; }
+  .filter-bar { padding: 0 24px; }
+  .artists-grid { grid-template-columns: repeat(2,1fr); }
+  .artist-card:nth-child(3n), .artist-card:nth-child(4n) { border-right: 1px solid var(--gray-200); }
   .artist-card:nth-child(2n) { border-right: none; }
+  .artist-card.featured { grid-column: span 2; }
+  .artist-card.featured .artist-portrait { min-height: 260px; }
+  footer { padding: 32px 24px; flex-direction: column; gap: 16px; align-items: flex-start; }
+  .nav { padding: 0 20px; }
 }
 </style>
 </head>
@@ -138,97 +124,199 @@ footer .footer-links a:hover { color: var(--black); }
   <a class="nav-logo" href="/human-artark/">Human ArtArk</a>
   <div class="nav-links">
     <a href="/human-artark/galleries/">Galleries</a>
-    <a href="/human-artark/artists/" style="color:var(--black);font-weight:500;">Artists</a>
+    <a href="/human-artark/artists/" class="active">Artists</a>
     <a href="/human-artark/apply/">Apply</a>
     <a class="nav-cta" href="/human-artark/apply/">Apply to Gallery</a>
   </div>
 </nav>
 
 <div class="page-header">
-  <h1>Artists</h1>
-  <p>Emerging artists based in the Bay Area — each with a standardized profile ready to send to any gallery on the platform.</p>
+  <div>
+    <h1>Artists</h1>
+    <p>Emerging and mid-career artists based in the Bay Area. Each maintains a gallery-ready profile — available to any gallery on the platform with one click.</p>
+  </div>
+  <div class="header-meta">8 artists · Bay Area</div>
 </div>
 
-<div class="artists-grid">
+<div class="filter-bar">
+  <button class="filter-tab active" data-filter="all">All</button>
+  <button class="filter-tab" data-filter="painting">Painting</button>
+  <button class="filter-tab" data-filter="photography">Photography</button>
+  <button class="filter-tab" data-filter="installation">Installation</button>
+  <button class="filter-tab" data-filter="printmaking">Printmaking</button>
+  <button class="filter-tab" data-filter="video">Video &amp; Performance</button>
+</div>
 
-<a class="artist-card" href="qinaus/">
-  <div class="artist-cover">
-    <img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/985223bb-73a4-41bc-a85f-83d4c9865601/Screenshot+2026-05-25+at+6.31.41%E2%80%AFPM.png" alt="Qinaus" loading="lazy" />
-  </div>
-  <div class="artist-works"><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/6c0bf380-faf9-46c3-8c7b-10b0a3bbd3cc/Screenshot+2026-05-25+at+3.50.35%E2%80%AFPM.png" alt="" loading="lazy" /><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/ede101aa-a281-42cd-85a8-c01edeb403b4/Screenshot+2026-05-25+at+4.10.39%E2%80%AFPM.png" alt="" loading="lazy" /><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/8e73c17b-6d9b-4998-871a-31247bb146e0/Smartist_1D46CCCA-72C7-407A-B6FF-6DFE1D96D48E.png" alt="" loading="lazy" /></div>
-  <div class="artist-info">
-    <div class="artist-name">Qinaus</div>
-    <div class="artist-medium">Oil on Canvas</div>
-    <div class="artist-location">San Francisco, CA</div>
-    <div class="artist-style">Contemporary · Expressive · Psychological</div>
-    <div class="artist-exh">2 exhibitions</div>
-  </div>
-</a>
-<a class="artist-card" href="marcus-chen/">
-  <div class="artist-cover">
-    <img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/1bd46b8e-cb56-40a3-a3ed-2a4e8bf20387/Screenshot+2026-05-25+at+7.33.41%E2%80%AFPM.png" alt="Marcus Chen" loading="lazy" />
-  </div>
-  <div class="artist-works"><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/c8e4b994-0005-4053-ab21-fe4ad8ddf325/Screenshot+2026-05-25+at+7.33.26%E2%80%AFPM.png" alt="" loading="lazy" /><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/1a20e7b7-5a01-411b-a6ee-9e3cf94aa9f8/Screenshot+2026-05-25+at+7.33.11%E2%80%AFPM.png" alt="" loading="lazy" /><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/09a6992b-55d3-43f3-b0dc-a8d29109c8d1/Smartist_CA50706D-A074-4AFC-A1C2-B8A1DB70DBAA.png" alt="" loading="lazy" /></div>
-  <div class="artist-info">
-    <div class="artist-name">Marcus Chen</div>
-    <div class="artist-medium">Photography</div>
-    <div class="artist-location">Oakland, CA</div>
-    <div class="artist-style">Documentary · Urban · Conceptual</div>
-    <div class="artist-exh">4 exhibitions</div>
-  </div>
-</a>
-<a class="artist-card" href="elena-vasquez/">
-  <div class="artist-cover">
-    <img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/e8ec2506-5d2c-440d-aef1-a1a41f02eff5/Screenshot+2026-05-25+at+8.53.01%E2%80%AFPM.png" alt="Elena Vasquez" loading="lazy" />
-  </div>
-  <div class="artist-works"><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/7a1e0043-d427-4f9f-af67-115f8512cc69/Screenshot+2026-05-25+at+8.43.40%E2%80%AFPM.png" alt="" loading="lazy" /><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/1eb6a3da-785c-40f0-9b3e-7789b2fb22f9/Screenshot+2026-05-25+at+8.02.56%E2%80%AFPM.png" alt="" loading="lazy" /><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/b191d9cc-c683-4d2f-863e-218e1933ccc5/Smartist_506DDA00-767A-42EB-BA7D-120BA6AD7201.png" alt="" loading="lazy" /></div>
-  <div class="artist-info">
-    <div class="artist-name">Elena Vasquez</div>
-    <div class="artist-medium">Mixed Media · Installation</div>
-    <div class="artist-location">San Francisco, CA</div>
-    <div class="artist-style">Abstract · Feminist · Material</div>
-    <div class="artist-exh">6 exhibitions</div>
-  </div>
-</a>
-<a class="artist-card" href="david-park-jr/">
-  <div class="artist-cover">
-    <img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/18b51772-9c48-4fba-874b-3700eb2fa9a1/Screenshot+2026-05-25+at+10.08.03%E2%80%AFPM.png" alt="David Park Jr." loading="lazy" />
-  </div>
-  <div class="artist-works"><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/156a791d-03b4-4a01-b294-aa72c521696f/Screenshot+2026-05-25+at+8.03.47%E2%80%AFPM.png" alt="" loading="lazy" /><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/5b5d1fb0-0885-4bcd-b163-6b9f7790758e/Screenshot+2026-05-25+at+8.02.40%E2%80%AFPM.png" alt="" loading="lazy" /><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/a8220465-bd27-443a-bf10-286c602742b9/Screenshot+2026-05-25+at+8.02.20%E2%80%AFPM.png" alt="" loading="lazy" /></div>
-  <div class="artist-info">
-    <div class="artist-name">David Park Jr.</div>
-    <div class="artist-medium">Painting · Drawing</div>
-    <div class="artist-location">Berkeley, CA</div>
-    <div class="artist-style">Figurative · Gestural · Narrative</div>
-    <div class="artist-exh">3 exhibitions</div>
-  </div>
-</a>
-<a class="artist-card" href="nadia-okonkwo/">
-  <div class="artist-cover">
-    <img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/2cf3d5ed-747f-416f-bd71-56fe2f4c2883/Screenshot+2026-05-25+at+10.17.53%E2%80%AFPM.png" alt="Nadia Okonkwo" loading="lazy" />
-  </div>
-  <div class="artist-works"><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/21b64161-8104-48f0-ac1e-3402af5cf424/Smartist_2D5BE266-2396-40B6-8EF0-6F81C8AF3702.png" alt="" loading="lazy" /><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/8727e93d-1a3e-4ac8-9073-e8bbfbe17235/Smartist_4B6F59A0-A83D-4F1F-88E3-C4337D28D745.png" alt="" loading="lazy" /><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/8e73c17b-6d9b-4998-871a-31247bb146e0/Smartist_1D46CCCA-72C7-407A-B6FF-6DFE1D96D48E.png" alt="" loading="lazy" /></div>
-  <div class="artist-info">
-    <div class="artist-name">Nadia Okonkwo</div>
-    <div class="artist-medium">Video · Performance</div>
-    <div class="artist-location">Oakland, CA</div>
-    <div class="artist-style">Conceptual · Political · Durational</div>
-    <div class="artist-exh">8 exhibitions</div>
-  </div>
-</a>
-<a class="artist-card" href="james-wu/">
-  <div class="artist-cover">
-    <img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/ede101aa-a281-42cd-85a8-c01edeb403b4/Screenshot+2026-05-25+at+4.10.39%E2%80%AFPM.png" alt="James Wu" loading="lazy" />
-  </div>
-  <div class="artist-works"><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/6c0bf380-faf9-46c3-8c7b-10b0a3bbd3cc/Screenshot+2026-05-25+at+3.50.35%E2%80%AFPM.png" alt="" loading="lazy" /><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/c8e4b994-0005-4053-ab21-fe4ad8ddf325/Screenshot+2026-05-25+at+7.33.26%E2%80%AFPM.png" alt="" loading="lazy" /><img src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/1a20e7b7-5a01-411b-a6ee-9e3cf94aa9f8/Screenshot+2026-05-25+at+7.33.11%E2%80%AFPM.png" alt="" loading="lazy" /></div>
-  <div class="artist-info">
-    <div class="artist-name">James Wu</div>
-    <div class="artist-medium">Printmaking · Digital</div>
-    <div class="artist-location">San Jose, CA</div>
-    <div class="artist-style">Graphic · Systems · East-West</div>
-    <div class="artist-exh">5 exhibitions</div>
-  </div>
-</a>
+<div class="artists-grid" id="grid">
+
+  <!-- 1 · Qinaus · featured -->
+  <a class="artist-card featured" href="qinaus/" data-tags="painting">
+    <div class="artist-portrait">
+      <img class="portrait-img" loading="eager"
+        src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/985223bb-73a4-41bc-a85f-83d4c9865601/Screenshot+2026-05-25+at+6.31.41%E2%80%AFPM.png"
+        alt="Qinaus" />
+      <span class="medium-tag">Oil Painting</span>
+    </div>
+    <div class="works-strip">
+      <img loading="lazy" src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/6c0bf380-faf9-46c3-8c7b-10b0a3bbd3cc/Screenshot+2026-05-25+at+3.50.35%E2%80%AFPM.png" alt="Life Flow" />
+      <img loading="lazy" src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/ede101aa-a281-42cd-85a8-c01edeb403b4/Screenshot+2026-05-25+at+4.10.39%E2%80%AFPM.png" alt="Reciprocate" />
+      <img loading="lazy" src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/8e73c17b-6d9b-4998-871a-31247bb146e0/Smartist_1D46CCCA-72C7-407A-B6FF-6DFE1D96D48E.png" alt="Roofwalker" />
+    </div>
+    <div class="artist-info">
+      <div class="card-name">Qinaus</div>
+      <div class="card-medium">Oil on Canvas · Psychological Abstraction</div>
+      <div class="card-location">San Francisco, CA</div>
+      <div class="card-exh">2 exhibitions · New York Design Week, Pacific Art League · 2026</div>
+    </div>
+  </a>
+
+  <!-- 2 · Kai Nakamura · photography -->
+  <a class="artist-card" href="kai-nakamura/" data-tags="photography">
+    <div class="artist-portrait">
+      <img class="portrait-img" loading="lazy"
+        src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/1bd46b8e-cb56-40a3-a3ed-2a4e8bf20387/Screenshot+2026-05-25+at+7.33.41%E2%80%AFPM.png"
+        alt="Kai Nakamura" />
+      <span class="medium-tag">Photography</span>
+    </div>
+    <div class="works-strip">
+      <img loading="lazy" src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/c8e4b994-0005-4053-ab21-fe4ad8ddf325/Screenshot+2026-05-25+at+7.33.26%E2%80%AFPM.png" alt="" />
+      <img loading="lazy" src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/1a20e7b7-5a01-411b-a6ee-9e3cf94aa9f8/Screenshot+2026-05-25+at+7.33.11%E2%80%AFPM.png" alt="" />
+      <img loading="lazy" src="https://picsum.photos/seed/kai-nm3/300/300" alt="" />
+    </div>
+    <div class="artist-info">
+      <div class="card-name">Kai Nakamura</div>
+      <div class="card-medium">Photography · Film</div>
+      <div class="card-location">Berkeley, CA</div>
+      <div class="card-exh">4 exhibitions · Chung 24, Gray Loft · 2023–2026</div>
+    </div>
+  </a>
+
+  <!-- 3 · Amara Diallo · installation -->
+  <a class="artist-card" href="amara-diallo/" data-tags="installation">
+    <div class="artist-portrait">
+      <img class="portrait-img" loading="lazy"
+        src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/e8ec2506-5d2c-440d-aef1-a1a41f02eff5/Screenshot+2026-05-25+at+8.53.01%E2%80%AFPM.png"
+        alt="Amara Diallo" />
+      <span class="medium-tag">Installation</span>
+    </div>
+    <div class="works-strip">
+      <img loading="lazy" src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/7a1e0043-d427-4f9f-af67-115f8512cc69/Screenshot+2026-05-25+at+8.43.40%E2%80%AFPM.png" alt="" />
+      <img loading="lazy" src="https://picsum.photos/seed/amara-d2/300/300" alt="" />
+      <img loading="lazy" src="https://picsum.photos/seed/amara-d3/300/300" alt="" />
+    </div>
+    <div class="artist-info">
+      <div class="card-name">Amara Diallo</div>
+      <div class="card-medium">Sculpture · Installation</div>
+      <div class="card-location">Oakland, CA</div>
+      <div class="card-exh">6 exhibitions · SOMArts, Pro Arts, Aggregate Space · 2021–2026</div>
+    </div>
+  </a>
+
+  <!-- 4 · Sofia Reyes · painting -->
+  <a class="artist-card" href="sofia-reyes/" data-tags="painting">
+    <div class="artist-portrait">
+      <img class="portrait-img" loading="lazy"
+        src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/18b51772-9c48-4fba-874b-3700eb2fa9a1/Screenshot+2026-05-25+at+10.08.03%E2%80%AFPM.png"
+        alt="Sofia Reyes" />
+      <span class="medium-tag">Painting · Drawing</span>
+    </div>
+    <div class="works-strip">
+      <img loading="lazy" src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/156a791d-03b4-4a01-b294-aa72c521696f/Screenshot+2026-05-25+at+8.03.47%E2%80%AFPM.png" alt="" />
+      <img loading="lazy" src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/5b5d1fb0-0885-4bcd-b163-6b9f7790758e/Screenshot+2026-05-25+at+8.02.40%E2%80%AFPM.png" alt="" />
+      <img loading="lazy" src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/a8220465-bd27-443a-bf10-286c602742b9/Screenshot+2026-05-25+at+8.02.20%E2%80%AFPM.png" alt="" />
+    </div>
+    <div class="artist-info">
+      <div class="card-name">Sofia Reyes</div>
+      <div class="card-medium">Painting · Drawing</div>
+      <div class="card-location">San Francisco, CA · Mission District</div>
+      <div class="card-exh">3 exhibitions · ARC Gallery, Voss Gallery · 2024–2026</div>
+    </div>
+  </a>
+
+  <!-- 5 · Theo Okafor · video/performance -->
+  <a class="artist-card" href="theo-okafor/" data-tags="video">
+    <div class="artist-portrait">
+      <img class="portrait-img" loading="lazy"
+        src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/2cf3d5ed-747f-416f-bd71-56fe2f4c2883/Screenshot+2026-05-25+at+10.17.53%E2%80%AFPM.png"
+        alt="Theo Okafor" />
+      <span class="medium-tag">Video · Performance</span>
+    </div>
+    <div class="works-strip">
+      <img loading="lazy" src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/b191d9cc-c683-4d2f-863e-218e1933ccc5/Smartist_506DDA00-767A-42EB-BA7D-120BA6AD7201.png" alt="" />
+      <img loading="lazy" src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/21b64161-8104-48f0-ac1e-3402af5cf424/Smartist_2D5BE266-2396-40B6-8EF0-6F81C8AF3702.png" alt="" />
+      <img loading="lazy" src="https://picsum.photos/seed/theo-ok3/300/300" alt="" />
+    </div>
+    <div class="artist-info">
+      <div class="card-name">Theo Okafor</div>
+      <div class="card-medium">Video Art · Performance</div>
+      <div class="card-location">Oakland, CA</div>
+      <div class="card-exh">8 exhibitions · The Lab, Rock Paper Scissors, Part 2 · 2019–2026</div>
+    </div>
+  </a>
+
+  <!-- 6 · Hannah Weiss · printmaking -->
+  <a class="artist-card" href="hannah-weiss/" data-tags="printmaking">
+    <div class="artist-portrait">
+      <img class="portrait-img" loading="lazy"
+        src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/8727e93d-1a3e-4ac8-9073-e8bbfbe17235/Smartist_4B6F59A0-A83D-4F1F-88E3-C4337D28D745.png"
+        alt="Hannah Weiss" />
+      <span class="medium-tag">Printmaking</span>
+    </div>
+    <div class="works-strip">
+      <img loading="lazy" src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/09a6992b-55d3-43f3-b0dc-a8d29109c8d1/Smartist_CA50706D-A074-4AFC-A1C2-B8A1DB70DBAA.png" alt="" />
+      <img loading="lazy" src="https://picsum.photos/seed/hannah-w2/300/300" alt="" />
+      <img loading="lazy" src="https://picsum.photos/seed/hannah-w3/300/300" alt="" />
+    </div>
+    <div class="artist-info">
+      <div class="card-name">Hannah Weiss</div>
+      <div class="card-medium">Printmaking · Collage</div>
+      <div class="card-location">San Francisco, CA</div>
+      <div class="card-exh">5 exhibitions · Kala Art Institute, SFWA · 2022–2026</div>
+    </div>
+  </a>
+
+  <!-- 7 · James Park · new media -->
+  <a class="artist-card" href="james-park/" data-tags="installation">
+    <div class="artist-portrait">
+      <img class="portrait-img" loading="lazy"
+        src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/1eb6a3da-785c-40f0-9b3e-7789b2fb22f9/Screenshot+2026-05-25+at+8.02.56%E2%80%AFPM.png"
+        alt="James Park" />
+      <span class="medium-tag">Digital · New Media</span>
+    </div>
+    <div class="works-strip">
+      <img loading="lazy" src="https://picsum.photos/seed/james-pk1/300/300" alt="" />
+      <img loading="lazy" src="https://picsum.photos/seed/james-pk2/300/300" alt="" />
+      <img loading="lazy" src="https://picsum.photos/seed/james-pk3/300/300" alt="" />
+    </div>
+    <div class="artist-info">
+      <div class="card-name">James Park</div>
+      <div class="card-medium">Digital Art · New Media</div>
+      <div class="card-location">San Jose, CA</div>
+      <div class="card-exh">5 exhibitions · Anno Domini, Gray Loft · 2022–2026</div>
+    </div>
+  </a>
+
+  <!-- 8 · Mei Lin Zhang · ceramics -->
+  <a class="artist-card" href="mei-lin-zhang/" data-tags="installation">
+    <div class="artist-portrait">
+      <img class="portrait-img" loading="lazy"
+        src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/8e73c17b-6d9b-4998-871a-31247bb146e0/Smartist_1D46CCCA-72C7-407A-B6FF-6DFE1D96D48E.png"
+        alt="Mei Lin Zhang" />
+      <span class="medium-tag">Ceramics · Sculpture</span>
+    </div>
+    <div class="works-strip">
+      <img loading="lazy" src="https://picsum.photos/seed/mei-lz1/300/300" alt="" />
+      <img loading="lazy" src="https://picsum.photos/seed/mei-lz2/300/300" alt="" />
+      <img loading="lazy" src="https://picsum.photos/seed/mei-lz3/300/300" alt="" />
+    </div>
+    <div class="artist-info">
+      <div class="card-name">Mei Lin Zhang</div>
+      <div class="card-medium">Ceramics · Sculpture</div>
+      <div class="card-location">Berkeley, CA</div>
+      <div class="card-exh">3 exhibitions · Berkeley Art Center, Olive Hyde · 2024–2026</div>
+    </div>
+  </a>
+
 </div>
 
 <footer>
@@ -239,6 +327,26 @@ footer .footer-links a:hover { color: var(--black); }
     <a href="/human-artark/apply/">Apply</a>
   </div>
 </footer>
+
+<script>
+document.querySelectorAll('.filter-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    const f = this.dataset.filter;
+    const cards = document.querySelectorAll('.artist-card');
+    cards.forEach(c => {
+      const match = f === 'all' || c.dataset.tags === f;
+      c.style.display = match ? '' : 'none';
+    });
+    // reapply borders
+    const vis = [...cards].filter(c => c.style.display !== 'none');
+    vis.forEach((c, i) => {
+      c.style.borderRight = (i % 4 === 3 || i === vis.length - 1) ? 'none' : '1px solid var(--gray-200)';
+    });
+  });
+});
+</script>
 
 </body>
 </html>
