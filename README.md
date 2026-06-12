@@ -1,140 +1,128 @@
 # Human ArtArk
 
-**In the age of AI-generated images, a platform that uses agents to help real human artists get seen, apply to galleries, find residencies, and sell their work — while the world watches them grow.**
+> *In an age of infinite AI images, Human ArtArk is where real artists grow — and where you get to watch.*
 
-🌐 **Live:** [naaaaaaqi.github.io/human-artark](https://naaaaaaqi.github.io/human-artark/)
-
----
-
-## The Problem
-
-Any model can generate a painting in 3 seconds. In 2026, "beautiful image" is no longer a signal of anything.
-
-But there are still tens of thousands of real artists — people spending years in studios, making things with their hands — who can't get gallery shows not because their work isn't good enough, but because **the art world has no infrastructure for discovery at scale.** Galleries receive hundreds of cold emails. Artists don't know which ones are accepting submissions, what they're looking for, or when the deadline is.
-
-The information exists. It's just scattered across 70+ websites, newsletters, and Instagram DMs. No one has aggregated it into a usable form for artists.
-
-**Human ArtArk is the agent that does that.**
+🌐 **Live demo:** [naaaaaaqi.github.io/human-artark](https://naaaaaaqi.github.io/human-artark/)
 
 ---
 
-## What We Built
+## The Idea
 
-A full-stack platform — static frontend + autonomous agent pipeline — that:
+Any model can generate a beautiful image. In 2026, that sentence is no longer remarkable.
 
-1. **Monitors galleries continuously** — scrapes websites, subscribes to newsletters, parses open call announcements
-2. **Maintains a live gallery database** — structured data on 70+ Bay Area galleries: open call status, deadlines, submission preferences, contact info
-3. **Generates artist-facing pages** — every gallery gets a detail page, every artist gets a profile; the agent regenerates the site when data changes
-4. **Lets artists apply with one click** — profile attached automatically, gallery pre-filled from context
-5. **Surfaces artists to collectors** — public profile + works for sale, 0% commission, direct purchase
+What is remarkable — what is increasingly rare — is a real person, making something with their hands, over years, in public. Human ArtArk is built on one bet:
 
-### The Agent Pipeline
+**When infinite AI images flood the world, a work made by a human becomes a different kind of object. Not just aesthetically — existentially. You're not buying pixels. You're buying proof that a specific consciousness existed and chose to make this.**
+
+The platform exists to make that story visible, from the very beginning.
+
+---
+
+## What It Is
+
+Human ArtArk is not an art marketplace. It's not a portfolio tool. It's not a social network.
+
+It's the place where an artist becomes an artist — **in front of witnesses.**
+
+Every artist on the platform has a public profile that grows with them: their first uploaded work, their first gallery acceptance, their first residency, their first sale. Users follow this arc in real time. They don't discover the artist after the solo show. They discover them before anyone else does.
+
+The platform serves the artist at every stage:
+
+| Stage | What Human ArtArk Does |
+|-------|------------------------|
+| **Starting out** | Build a gallery-ready profile — works, CV, statement, all in one shareable link |
+| **Getting in** | Browse 70+ galleries with live open call status. Apply directly, profile attached automatically |
+| **Going deeper** | Discover residency opportunities worldwide, filtered by medium and deadline |
+| **Being seen** | Public profile, visible growth, a community of followers watching the journey |
+| **Selling work** | List works directly on the profile. Collectors buy, artist keeps 100% — no commission |
+
+---
+
+## The Core Insight: Witness
+
+The relationship between user and artist on Human ArtArk is not buyer/seller. It's **witness/witnessed.**
 
 ```
-Gallery websites + Newsletters
-        ↓
-  [Scraper Agent]  ←── OpenClaw runtime
-  parse_newsletters.py / update_gallery_status.py
-        ↓
-  GALLERY_DATABASE.md  (structured, version-controlled)
-        ↓
-  [Site Generator Agent]
-  generate_artark_site.py
-        ↓
-  77 gallery pages + artist profiles
-  deployed to GitHub Pages on every update
+Follower    →  watches the artist's journey unfold in public
+Supporter   →  buys a work, acquires a piece of the story
+Witness     →  "I was following them before anyone knew their name"
 ```
 
-The agent reads newsletters, extracts open call signals ("now accepting submissions", "deadline: July 1"), updates gallery status, and triggers a site rebuild. Artists see live, accurate data without anyone updating a spreadsheet by hand.
+This witness identity has compounding value. When an early follower collects a work before an artist's first gallery show, they don't just own the piece — they own proof of their own taste, their own early belief. That's not a transaction. That's a relationship.
+
+For the artist: you don't grow alone. Every milestone — gallery acceptance, residency offer, first sale — is visible to the people who chose to pay attention. The community is the witness. The platform is the stage.
 
 ---
 
-## Why This Is an Agent Problem
+## Why Now
 
-Gallery open call status changes weekly. A static database rots. You need an agent that:
+The timing is specific. Three things are happening simultaneously:
 
-- **Reads** — subscribes to ~70 gallery newsletters, parses unstructured prose for structured signals
-- **Judges** — determines whether a gallery is currently accepting submissions
-- **Writes** — updates the database and regenerates 77 HTML pages
-- **Acts** — sends application emails on behalf of artists with their profile attached
+1. **AI-generated images have made "beautiful" meaningless as a signal.** Scarcity of human authorship is emerging as the new premium.
 
-This is not a CRUD app. Every piece of data in the system was produced by an agent reading the real world.
+2. **The art world's discovery infrastructure hasn't scaled.** Galleries still run on cold emails. Artists still don't know which doors to knock on, or when. The information exists — it just hasn't been structured.
 
----
+3. **Audiences want to participate in someone's story, not just consume the output.** The success of Patreon, Substack, and every creator platform points in the same direction: people want proximity to the making, not just the made.
 
-## The Unique Insight
-
-The irony is precise: **we use AI agents to help human artists survive in an AI-dominated world.**
-
-The pitch to collectors is equally sharp: when any model can generate a beautiful image, the thing that becomes scarce and valuable is *provenance* — knowing that a real person made this, over years, in front of witnesses. Human ArtArk is where you find them before the rest of the world does.
+Human ArtArk sits at the intersection of all three.
 
 ---
 
-## What's Live Right Now
+## What's Live
 
-| Page | URL |
-|------|-----|
-| Homepage | [/human-artark/](https://naaaaaaqi.github.io/human-artark/) |
-| Gallery list (70+) | [/human-artark/galleries/](https://naaaaaaqi.github.io/human-artark/galleries/) |
-| Gallery detail (×77) | [/human-artark/galleries/minnesota-street-project/](https://naaaaaaqi.github.io/human-artark/galleries/minnesota-street-project/) |
-| Artist list | [/human-artark/artists/](https://naaaaaaqi.github.io/human-artark/artists/) |
-| Artist detail (×7) | [/human-artark/artists/amara-diallo/](https://naaaaaaqi.github.io/human-artark/artists/amara-diallo/) |
-| Apply to gallery | [/human-artark/apply/](https://naaaaaaqi.github.io/human-artark/apply/) |
-
-**Agent scripts (in `/openclaw/scripts/`):**
-- `parse_newsletters.py` — reads gallery newsletters, extracts open call signals
-- `update_gallery_status.py` — updates GALLERY_DATABASE.md from scraped data
-- `generate_artark_site.py` — generates all 77 gallery pages + artist pages from the database
-- `generate_html.py` — generates the openclaw gallery agent UI
+| | |
+|---|---|
+| **Homepage** | [naaaaaaqi.github.io/human-artark](https://naaaaaaqi.github.io/human-artark/) |
+| **Gallery list** | 70+ Bay Area galleries with open call status |
+| **Gallery detail pages** | 77 individual gallery pages with apply CTA |
+| **Artist profiles** | 7 artists with portrait, works, CV, milestones, follower count |
+| **Apply to gallery** | One-click application, profile auto-attached |
+| **Works for sale** | Direct purchase, 0% commission |
 
 ---
 
-## Tech Stack
+## The Differentiation
 
-- **Runtime:** OpenClaw (gallery agent harness)
-- **Frontend:** Vanilla HTML/CSS — no framework, no build step, deploys instantly to GitHub Pages
-- **Agent scripts:** Python — BeautifulSoup scraping, regex newsletter parsing, markdown database, HTML generation
-- **Hosting:** GitHub Pages (free, static, zero infra)
-- **Images:** Unsplash direct IDs + Picsum (free, no API key)
-- **Data:** `GALLERY_DATABASE.md` — version-controlled, human-readable, agent-writable
+| Platform | What it is | What's missing |
+|----------|-----------|----------------|
+| **Artsy** | Gallery/auction marketplace | Artists are inventory, not users. Entry requires gallery representation. |
+| **Saatchi Art** | Artist-to-collector sales | No gallery application. No residencies. No growth narrative. |
+| **Submittable / CaFÉ** | Application submission tools | Just forms. No profile that persists. No audience. |
+| **Artwork Archive** | Artist inventory management | Pure back-office tool. No public presence. |
+| **Human ArtArk** | **The artist's public journey** | — |
+
+The gap: no platform puts the **artist's growth story** at the center, makes it visible to an audience, and connects it to the practical infrastructure (gallery applications, residencies, sales) in one place.
 
 ---
 
 ## Long-Term Vision
 
-**Phase 1 (now):** Bay Area galleries. Agent monitors newsletters and open calls. Artists apply.
+**Phase 1 — Bay Area:** 70+ galleries. Live open call data. Artist profiles with growth timelines. Direct sales.
 
-**Phase 2:** Global expansion. The same agent pipeline scales to London, Berlin, New York. The database becomes the most comprehensive structured record of gallery open calls on earth.
+**Phase 2 — Global:** The same model scales to London, Berlin, New York, Seoul. Human ArtArk becomes the most complete structured record of gallery open calls on earth.
 
-**Phase 3:** Artist CRM. Every application tracked. Response rates by gallery. The agent learns which galleries respond to which types of work and surfaces better matches over time.
+**Phase 3 — Residencies:** The same discovery + application infrastructure applied to artist residencies worldwide — Yaddo, MacDowell, Headlands, 500+ others. One profile, apply everywhere.
 
-**Phase 4:** Residency network. Same pipeline applied to artist residencies worldwide — Yaddo, MacDowell, Headlands, 500+ others. One profile, apply everywhere.
+**Phase 4 — Provenance:** Works purchased on the platform carry a verifiable record — "You were the 3rd person to collect this artist's work." Early collectors build a documented history of taste and belief. This becomes a new kind of cultural capital.
 
-**Phase 5:** Collector marketplace. Works listed on artist profiles. Smart contracts for provenance tracking. "You were the 3rd person to collect Sofia Reyes" becomes a verifiable, valuable fact.
-
-The moat is the data. Every newsletter subscription, every open call parsed, every application sent adds signal. The agent gets better at matching artists to opportunities. No competitor can replicate 3 years of accumulated gallery intelligence overnight.
+**Phase 5 — The Record:** Every accepted application, every milestone, every collected work is part of an artist's permanent public record. "Human ArtArk verified" becomes a signal galleries, curators, and collectors trust.
 
 ---
 
 ## The Bigger Bet
 
-In 10 years, "made by a human" will be a premium designation — the way "organic" became a premium food label when industrial farming scaled. Human ArtArk is building the infrastructure to verify, surface, and monetize that designation before the market fully prices it in.
+In 10 years, "made by a human" will be a premium designation — the way "organic" became a food label when industrial farming scaled. The question is: who builds the infrastructure to verify, surface, and support human-made art before the market fully prices it in?
 
-We're not anti-AI. We're pro-human. And we're using every tool available — including agents — to make sure human artists don't get left behind.
+We're not anti-AI. We're pro-human. We believe the most important creative work of the next decade will be done by people who insist on making things with their hands — and that those people deserve a platform built entirely around their needs.
 
 ---
 
-## Team
+## Built By
 
-Built by **Na Qi** ([@NaaaaaaQi](https://github.com/NaaaaaaQi)) with Claude Code.
+**Na Qi** ([@NaaaaaaQi](https://github.com/NaaaaaaQi))
 
-- Gallery database: 70+ Bay Area galleries, fully structured
-- Agent pipeline: live newsletter monitoring + status updates
-- Platform: homepage, 77 gallery pages, artist profiles, apply system
-
-**Repos:**
-- Platform: [github.com/NaaaaaaQi/human-artark](https://github.com/NaaaaaaQi/human-artark)
-- Gallery agent: [github.com/NaaaaaaQi/my-gallery-agent](https://github.com/NaaaaaaQi/my-gallery-agent)
+- 🌐 Platform: [github.com/NaaaaaaQi/human-artark](https://github.com/NaaaaaaQi/human-artark)  
+- 🤖 Gallery agent: [github.com/NaaaaaaQi/my-gallery-agent](https://github.com/NaaaaaaQi/my-gallery-agent)
 
 ---
 
