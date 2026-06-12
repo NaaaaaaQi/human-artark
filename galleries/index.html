@@ -3,1891 +3,1572 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bay Area Gallery Database</title>
+<title>Galleries — Human ArtArk</title>
 <style>
-  :root {
-    --bg: #0f0f13;
-    --surface: #1a1a22;
-    --surface2: #22222e;
-    --border: #2e2e3e;
-    --accent: #7c6af7;
-    --accent2: #5de6c8;
-    --green: #3ecf7e;
-    --red: #f05050;
-    --text: #e8e8f0;
-    --muted: #888899;
-    --radius: 12px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
 
-  /* ── Header ── */
-  .hero {
-    background: linear-gradient(135deg, #1a1230 0%, #0f1a2e 100%);
-    border-bottom: 1px solid var(--border);
-    padding: 48px 24px 32px;
-    text-align: center;
-  }
-  .hero h1 {
-    font-size: clamp(1.6rem, 4vw, 2.6rem);
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 10px;
-  }
-  .hero p { color: var(--muted); font-size: 0.95rem; margin-bottom: 20px; }
-  .stats {
-    display: inline-flex;
-    gap: 24px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 99px;
-    padding: 8px 24px;
-    font-size: 0.85rem;
-  }
-  .stat-item { display: flex; align-items: center; gap: 6px; }
-  .stat-num { font-weight: 700; color: var(--accent2); }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black: #000; --white: #fff; --gray-100: #f8f8f8;
+  --gray-200: #e8e8e8; --gray-400: #999; --gray-600: #555; --gray-800: #222;
+  --font-serif: 'Georgia','Times New Roman',serif;
+  --font-sans:  'Helvetica Neue','Helvetica','Arial',sans-serif;
+}
+html { font-size: 16px; }
+body { font-family: var(--font-sans); color: var(--black); background: var(--white);
+       -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
 
-  /* ── Filters ── */
-  .filters {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(15,15,19,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .search-input {
-    flex: 1;
-    min-width: 180px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    padding: 8px 14px;
-    font-size: 0.9rem;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .search-input:focus { border-color: var(--accent); }
-  .filter-select {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    padding: 8px 12px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    outline: none;
-  }
-  .filter-btn {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--muted);
-    padding: 8px 14px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .filter-btn:hover, .filter-btn.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
-  }
-  #count-display {
-    color: var(--muted);
-    font-size: 0.82rem;
-    margin-left: auto;
-    white-space: nowrap;
-  }
+/* NAV */
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 56px;
+       background: var(--white); border-bottom: 1px solid var(--gray-200);
+       display: flex; align-items: center; padding: 0 32px; }
+.nav-logo { font-family: var(--font-serif); font-size: 17px; font-weight: normal;
+            letter-spacing: 0.01em; margin-right: auto; }
+.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-links a { font-size: 13px; color: var(--gray-600); transition: color 0.15s; }
+.nav-links a:hover { color: var(--black); }
+.nav-cta { font-size: 13px !important; font-weight: 600; color: var(--white) !important;
+           background: var(--black); padding: 8px 18px !important; transition: opacity 0.15s; }
+.nav-cta:hover { opacity: 0.75; }
 
-  /* ── Grid ── */
-  .main { max-width: 1400px; margin: 0 auto; padding: 28px 20px 60px; }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
-    margin-bottom: 48px;
-  }
+/* BUTTONS */
+.btn-primary { font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+               background: var(--black); color: var(--white); padding: 14px 28px;
+               transition: opacity 0.15s; display: inline-block; }
+.btn-primary:hover { opacity: 0.75; }
+.btn-outline { font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+               background: var(--white); color: var(--black); padding: 13px 28px;
+               border: 1px solid var(--black); transition: all 0.15s; display: inline-block; }
+.btn-outline:hover { background: var(--black); color: var(--white); }
+.btn-text { font-size: 13px; color: var(--gray-600); border-bottom: 1px solid var(--gray-400);
+            padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; display: inline-block; }
+.btn-text:hover { color: var(--black); border-color: var(--black); }
 
-  /* ── Cards ── */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px 18px 16px;
-    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .card:hover {
-    transform: translateY(-2px);
-    border-color: var(--accent);
-    box-shadow: 0 8px 30px rgba(124,106,247,0.12);
-  }
-  .card[data-open="open"] { border-left: 3px solid var(--green); }
-  .card[data-blue="true"] { border-left: 3px solid #6ba3f5; }
+/* OPEN DOT */
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.dot.open { background: #1aaa55; }
+.dot.closed { background: var(--gray-400); }
+.dot.unknown { background: var(--gray-400); }
 
-  .card-header { display: flex; flex-direction: column; gap: 6px; }
-  .card-title-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  .card-name {
-    font-size: 0.97rem;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.3;
-  }
-  .card-badges { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; flex-shrink: 0; }
-  .gallery-url {
-    font-size: 0.78rem;
-    color: var(--accent);
-    text-decoration: none;
-    opacity: 0.85;
-    transition: opacity 0.15s;
-  }
-  .gallery-url:hover { opacity: 1; }
+@media (max-width: 768px) {
+  .nav { padding: 0 20px; }
+  .nav-links { gap: 16px; }
+}
 
-  .card-body { display: flex; flex-direction: column; gap: 6px; font-size: 0.83rem; }
-  .gallery-addr { color: var(--muted); }
-  .gallery-desc { color: #aab; line-height: 1.45; }
-  .gallery-note { color: var(--muted); font-style: italic; line-height: 1.4; }
-  .gallery-event {
-    background: var(--surface2);
-    border-radius: 6px;
-    padding: 6px 10px;
-    color: var(--accent2);
-    font-size: 0.8rem;
-    line-height: 1.4;
-  }
 
-  /* ── Badges ── */
-  .badge {
-    font-size: 0.7rem;
-    padding: 2px 7px;
-    border-radius: 99px;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-  .badge-green { background: rgba(62,207,126,0.15); color: var(--green); border: 1px solid rgba(62,207,126,0.3); }
-  .badge-red   { background: rgba(240,80,80,0.1);  color: var(--red);   border: 1px solid rgba(240,80,80,0.25); }
-  .badge-blue  { background: rgba(107,163,245,0.12); color: #6ba3f5;    border: 1px solid rgba(107,163,245,0.3); }
-  .badge-gray  { background: rgba(136,136,153,0.15); color: var(--muted); border: 1px solid var(--border); }
+.page-header {
+  margin-top: 56px;
+  padding: 72px 80px 48px;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 40px;
+}
+.page-header-left h1 {
+  font-family: var(--font-serif); font-size: clamp(36px,4vw,56px);
+  font-weight: normal; letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 12px;
+}
+.page-header-left p { font-size: 14px; color: var(--gray-600); line-height: 1.6; max-width: 480px; }
+.page-header-stats { display: flex; gap: 48px; flex-shrink: 0; }
+.ph-stat-num { font-family: var(--font-serif); font-size: 40px; font-weight: normal;
+               line-height: 1; display: block; }
+.ph-stat-label { font-size: 11px; color: var(--gray-400); letter-spacing: 0.1em;
+                  text-transform: uppercase; margin-top: 4px; display: block; }
 
-  /* ── Events table ── */
-  .events-section { margin-bottom: 40px; }
-  .events-section h2 { font-size: 1.1rem; margin-bottom: 14px; color: var(--text); }
-  .events-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.88rem;
-  }
-  .events-table th {
-    background: var(--surface2);
-    color: var(--muted);
-    font-weight: 600;
-    padding: 10px 14px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-  }
-  .events-table td {
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
-  }
-  .events-table tr:hover td { background: var(--surface2); }
+.filters {
+  position: sticky; top: 56px; z-index: 100;
+  background: var(--white); border-bottom: 1px solid var(--gray-200);
+  padding: 14px 80px;
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+}
+.search-input {
+  flex: 1; min-width: 220px;
+  border: 1px solid var(--gray-200); background: var(--white);
+  font-family: var(--font-sans); font-size: 13px; color: var(--black);
+  padding: 9px 14px; outline: none; transition: border-color 0.15s;
+}
+.search-input:focus { border-color: var(--black); }
+.filter-select {
+  border: 1px solid var(--gray-200); background: var(--white);
+  font-family: var(--font-sans); font-size: 13px; color: var(--black);
+  padding: 9px 12px; cursor: pointer; outline: none; transition: border-color 0.15s;
+}
+.filter-select:focus { border-color: var(--black); }
+.filter-btn {
+  background: var(--white); border: 1px solid var(--gray-200);
+  font-family: var(--font-sans); font-size: 12px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--gray-600);
+  padding: 9px 16px; cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: var(--black); border-color: var(--black); color: var(--white);
+}
+#count-display { font-size: 12px; color: var(--gray-400); margin-left: auto; white-space: nowrap; }
 
-  /* ── Actions ── */
-  .actions-section { margin-bottom: 48px; }
-  .actions-section h2 { font-size: 1.1rem; margin-bottom: 14px; color: var(--text); }
-  .actions-list {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px 16px 16px 40px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: #ccd;
-  }
+.gallery-list { max-width: 1200px; margin: 0 auto; }
 
-  /* ── Card footer ── */
-  .card-footer {
-    display: flex;
-    justify-content: flex-end;
-    padding-top: 8px;
-    border-top: 1px solid var(--border);
-    margin-top: 4px;
-  }
-  .apply-btn {
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--accent2);
-    text-decoration: none;
-    padding: 5px 12px;
-    border: 1px solid rgba(93,230,200,0.3);
-    border-radius: 6px;
-    transition: all 0.15s;
-  }
-  .apply-btn:hover {
-    background: rgba(93,230,200,0.1);
-    border-color: var(--accent2);
-  }
+.region-label {
+  padding: 28px 80px 12px;
+  font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-400);
+  border-bottom: 1px solid var(--gray-200);
+}
 
-  /* ── Hidden ── */
-  .card.hidden { display: none; }
+.gallery-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  padding: 22px 80px;
+  border-bottom: 1px solid var(--gray-200);
+  transition: background 0.15s; cursor: pointer;
+}
+.gallery-row:hover { background: var(--gray-100); }
+.gallery-row.hidden { display: none; }
 
-  /* ── Footer ── */
-  .footer {
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.78rem;
-    padding: 32px 24px;
-    border-top: 1px solid var(--border);
-  }
-  .footer a { color: var(--accent); text-decoration: none; }
+.row-left { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+.row-name-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.row-name { font-size: 15px; font-weight: 500; }
+.badge-open {
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+  color: #1aaa55; border: 1px solid rgba(26,170,85,0.3); padding: 2px 8px;
+}
+.badge-blue {
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+  color: #4a7cc7; border: 1px solid rgba(74,124,199,0.3); padding: 2px 8px;
+}
+.row-meta { font-size: 12px; color: var(--gray-400); }
+.row-desc { font-size: 13px; color: var(--gray-600); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 500px; }
+
+.row-right { display: flex; align-items: center; gap: 24px; flex-shrink: 0; }
+.row-url { font-size: 12px; color: var(--gray-600); transition: color 0.15s; }
+.row-url:hover { color: var(--black); }
+.row-arrow { font-size: 14px; color: var(--gray-400); transition: color 0.15s; }
+.gallery-row:hover .row-arrow { color: var(--black); }
+
+.list-footer { padding: 40px 80px; text-align: center; border-top: 1px solid var(--gray-200); }
+
+footer { padding: 40px 80px; display: flex; justify-content: space-between; align-items: center;
+          border-top: 1px solid var(--gray-200); font-family: var(--font-serif); font-size: 15px; }
+footer .footer-links { display: flex; gap: 28px; }
+footer .footer-links a { font-family: var(--font-sans); font-size: 12px; color: var(--gray-600); transition: color 0.15s; }
+footer .footer-links a:hover { color: var(--black); }
+
+@media (max-width: 768px) {
+  .page-header { padding: 48px 24px 32px; flex-direction: column; align-items: flex-start; }
+  .page-header-stats { gap: 32px; }
+  .filters { padding: 12px 24px; }
+  .region-label { padding: 24px 24px 12px; }
+  .gallery-row { padding: 18px 24px; }
+  .row-desc, .row-url { display: none; }
+  .list-footer { padding: 32px 24px; }
+  footer { padding: 32px 24px; flex-direction: column; gap: 20px; align-items: flex-start; }
+}
 </style>
 </head>
 <body>
 
-<div class="hero">
-  <div class="hero-brand"><a href="https://naaaaaaqi.github.io/human-artark/" style="color:var(--accent2);text-decoration:none;font-size:0.85rem;letter-spacing:0.08em;">← Human ArtArk</a></div>
-  <h1>Bay Area Gallery Database</h1>
-  <p>San Francisco · East Bay · Peninsula · South Bay · Santa Cruz · North Bay</p>
-  <div class="stats">
-    <div class="stat-item">🏛 <span class="stat-num">80</span> galleries</div>
-    <div class="stat-item">🟢 <span class="stat-num">22</span> open calls</div>
-    <div class="stat-item">📅 Updated <span class="stat-num">2026-06-11</span></div>
+<nav class="nav">
+  <a class="nav-logo" href="/">Human ArtArk</a>
+  <div class="nav-links">
+    <a href="/human-artark/galleries/" style="color:var(--black);font-weight:500;">Galleries</a>
+    <a href="/human-artark/artists/">Artists</a>
+    <a href="/human-artark/apply/">Apply</a>
+    <a class="nav-cta" href="/human-artark/apply/">Apply to Gallery</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-left">
+    <h1>Bay Area Galleries</h1>
+    <p>A curated database of 77 galleries across San Francisco, East Bay, Peninsula, and South Bay — updated weekly by scraping websites and parsing newsletters.</p>
+  </div>
+  <div class="page-header-stats">
+    <div>
+      <span class="ph-stat-num">77</span>
+      <span class="ph-stat-label">Galleries</span>
+    </div>
+    <div>
+      <span class="ph-stat-num">22</span>
+      <span class="ph-stat-label">Open Calls</span>
+    </div>
+    <div>
+      <span class="ph-stat-num">2026-06-11</span>
+      <span class="ph-stat-label">Last updated</span>
+    </div>
   </div>
 </div>
 
 <div class="filters">
-  <input class="search-input" type="search" id="search" placeholder="Search galleries, addresses…" />
+  <input class="search-input" type="search" id="search" placeholder="Search galleries…" />
   <select class="filter-select" id="region-filter">
     <option value="">All regions</option>
-    <option value="East Bay (Oakland / Berkeley)">East Bay (Oakland / Berkeley)</option>
-<option value="North Bay">North Bay</option>
-<option value="Peninsula / South Bay">Peninsula / South Bay</option>
-<option value="San Francisco">San Francisco</option>
-<option value="San Francisco / Marin">San Francisco / Marin</option>
-<option value="Santa Cruz Area">Santa Cruz Area</option>
-<option value="⚡ MSP Sub-galleries Watch List">⚡ MSP Sub-galleries Watch List</option>
-<option value="❌ Excluded Galleries">❌ Excluded Galleries</option>
-<option value="🎭 Experimental & Non-profit Spaces">🎭 Experimental & Non-profit Spaces</option>
-<option value="🔵 Blue-chip & Established Contemporary Galleries">🔵 Blue-chip & Established Contemporary Galleries</option>
-<option value="🤖 Tech, New Media & Interdisciplinary Spaces">🤖 Tech, New Media & Interdisciplinary Spaces</option>
+    <option value="San Francisco">San Francisco</option><option value="San Francisco / Marin">San Francisco / Marin</option><option value="East Bay (Oakland / Berkeley)">East Bay (Oakland / Berkeley)</option><option value="Peninsula / South Bay">Peninsula / South Bay</option><option value="Santa Cruz Area">Santa Cruz Area</option><option value="North Bay">North Bay</option><option value="🔵 Blue-chip & Established Contemporary Galleries">🔵 Blue-chip & Established Contemporary Galleries</option><option value="🤖 Tech, New Media & Interdisciplinary Spaces">🤖 Tech, New Media & Interdisciplinary Spaces</option><option value="🎭 Experimental & Non-profit Spaces">🎭 Experimental & Non-profit Spaces</option>
   </select>
   <button class="filter-btn active" data-filter="all">All</button>
   <button class="filter-btn" data-filter="open">🟢 Open Call</button>
   <button class="filter-btn" data-filter="stars3">⭐⭐⭐ Top picks</button>
-  <button class="filter-btn" data-filter="bluechip">🔵 Blue-chip</button>
+  <button class="filter-btn" data-filter="bluechip">Blue-chip</button>
   <span id="count-display"></span>
 </div>
 
-<div class="main">
-  <div class="grid" id="gallery-grid">
-    
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Minnesota Street Project</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://minnesotastreetproject.com" target="_blank" class="gallery-url">minnesotastreetproject.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 1275 Minnesota St, San Francisco (Dogpatch)</div>
-    <div class="gallery-desc">Arts district with 14 galleries</div>
-    <div class="gallery-note">📋 Each sub-gallery posts independently; check regularly</div>
-    <div class="gallery-event">🗓 First Saturday 4–7pm, Atrium; next 7/5; 7/11 Open Fell, 1150 25th St, Slash Gallery</div>
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Minnesota%20Street%20Project" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="open" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">City Art Gallery</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://cityartgallery.org" target="_blank" class="gallery-url">cityartgallery.org ↗</a>
-  </div>
-  <div class="card-body">
-    
-    <div class="gallery-desc">Artist cooperative run by ~200 artists</div>
-    <div class="gallery-note">📋 Accepting new member applications; apply to join as a cooperative member</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=City%20Art%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="open" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">111 Minna Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://111minnagallery.com" target="_blank" class="gallery-url">111minnagallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    <div class="gallery-desc">Contemporary art + event space</div>
-    <div class="gallery-note">📋 Accepting exhibition proposals; see website for contact info</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=111%20Minna%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Bryant Street Gallery SF</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://bryantstreet.com" target="_blank" class="gallery-url">bryantstreet.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    <div class="gallery-desc">Contemporary art; supports first exhibitions for new artists</div>
-    <div class="gallery-note">📋 Occasional; monitor website</div>
-    <div class="gallery-event">🗓 Reception 7/11 (Friday) 5–7 PM</div>
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Bryant%20Street%20Gallery%20SF" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Gallery House</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://galleryhouse.art" target="_blank" class="gallery-url">galleryhouse.art ↗</a>
-  </div>
-  <div class="card-body">
-    
-    
-    <div class="gallery-note">📋 Monitor website</div>
-    <div class="gallery-event">🗓 Monthly Artist Reception, second Saturday 5–7pm; last: 6/13</div>
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Gallery%20House" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="open" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Viewpoints Gallery</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://viewpointsgallery.com" target="_blank" class="gallery-url">viewpointsgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    <div class="gallery-desc">Artist cooperative</div>
-    <div class="gallery-note">📋 Apply to become a cooperative member</div>
-    <div class="gallery-event">🗓 First Friday Art Walk, monthly</div>
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Viewpoints%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">The Main Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://themaingallery.org" target="_blank" class="gallery-url">themaingallery.org ↗</a>
-  </div>
-  <div class="card-body">
-    
-    <div class="gallery-desc">Community gallery with monthly rotating shows</div>
-    <div class="gallery-note">📋 Via Artist Referral program; monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=The%20Main%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Mirus Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://mirusgallery.com" target="_blank" class="gallery-url">mirusgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    <div class="gallery-desc">Emerging/mid-career artists, contemporary art, private event venue</div>
-    <div class="gallery-note">📋 Occasional</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Mirus%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">M. Stark Gallery</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://mstarkgallery.com" target="_blank" class="gallery-url">mstarkgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    
-    <div class="gallery-note">📋 Primarily invitation-based; still worth monitoring</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=M.%20Stark%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Pamela Walsh Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://pamelawalshgallery.com" target="_blank" class="gallery-url">pamelawalshgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Pamela%20Walsh%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Andra Norris Gallery</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://andranorrisgallery.com" target="_blank" class="gallery-url">andranorrisgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    <div class="gallery-desc">Commercial contemporary gallery; artist representation</div>
-    <div class="gallery-note">📋 Invitation-based; portfolio submissions considered</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Andra%20Norris%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Romer Young Gallery</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://romeryounggallery.com" target="_blank" class="gallery-url">romeryounggallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    
-    <div class="gallery-note">📋 Primarily invitation-based</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Romer%20Young%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Chung 24 Gallery</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://chung24gallery.com" target="_blank" class="gallery-url">chung24gallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Chung%2024%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Fraenkel Gallery</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://fraenkelgallery.com" target="_blank" class="gallery-url">fraenkelgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    <div class="gallery-desc">Top-tier gallery, primarily photography</div>
-    <div class="gallery-note">📋 Invitation-only</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Fraenkel%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Hosfelt Gallery</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://hosfeltgallery.com" target="_blank" class="gallery-url">hosfeltgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 260 Utah St, San Francisco (Potrero Hill)</div>
-    <div class="gallery-desc">Contemporary art, international scope, 9,000 sq ft industrial space</div>
-    <div class="gallery-note">📋 Does not accept submissions</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Hosfelt%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="unknown" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">SOMArts Cultural Center</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-gray">Unknown</span></div>
-    </div>
-    <a href="https://somarts.org" target="_blank" class="gallery-url">somarts.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 934 Brannan St, San Francisco (SoMa)</div>
-    <div class="gallery-desc">Community-driven, social justice focus, multicultural</div>
-    <div class="gallery-note">📋 - Notes: Multiple themed open calls per year; one of SF's most active nonprofit art spaces</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=SOMArts%20Cultural%20Center" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Catharine Clark Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://cclarkgallery.com" target="_blank" class="gallery-url">cclarkgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 248 Utah St, San Francisco (Potrero Hill)</div>
-    <div class="gallery-desc">Contemporary art, experimental, founded 1991</div>
-    <div class="gallery-note">📋 Submit via Artsy or contact directly</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Catharine%20Clark%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Gallery 16</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://gallery16.com" target="_blank" class="gallery-url">gallery16.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 501 3rd St, San Francisco (SoMa)</div>
-    <div class="gallery-desc">Experimental contemporary art, print publishing</div>
-    <div class="gallery-note">📋 Occasional</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Gallery%2016" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Ratio 3</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://ratio3.org" target="_blank" class="gallery-url">ratio3.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 1447 Stevenson St, San Francisco (Mission)</div>
-    <div class="gallery-desc">Conceptual art, mid-career and emerging artists</div>
-    <div class="gallery-note">📋 Primarily invitation-based</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Ratio%203" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="open" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Voss Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://vossgallery.art" target="_blank" class="gallery-url">vossgallery.art ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 2211 Market St, San Francisco (Castro)</div>
-    <div class="gallery-desc">Contemporary art, supports emerging artists</div>
-    <div class="gallery-note">📋 vossgallery.art/pages/submissions</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Voss%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="open" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">ARC Gallery</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://arc-sf.com" target="_blank" class="gallery-url">arc-sf.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 1246 Folsom St, San Francisco (SoMa)</div>
-    <div class="gallery-desc">Artist cooperative gallery, juried exhibitions</div>
-    <div class="gallery-note">📋 Regular juried exhibitions posted periodically</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=ARC%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="open" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">San Francisco Women Artists (SFWA)</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://sfwomenartists.org" target="_blank" class="gallery-url">sfwomenartists.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 647 Irving St, San Francisco (Inner Sunset)</div>
-    <div class="gallery-desc">Women artists organization</div>
-    <div class="gallery-note">📋 Regular open calls</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=San%20Francisco%20Women%20Artists%20%28SFWA%29" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco" data-open="unknown" data-stars="1" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">SF Arts Commission Gallery</h3>
-      <div class="card-badges">⭐  <span class="badge badge-gray">Unknown</span></div>
-    </div>
-    <a href="https://sfartscommission.org" target="_blank" class="gallery-url">sfartscommission.org ↗</a>
-  </div>
-  <div class="card-body">
-    
-    <div class="gallery-desc">Government-supported, public art</div>
-    
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=SF%20Arts%20Commission%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco / Marin" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Haines Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://hainesgallery.com" target="_blank" class="gallery-url">hainesgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 2 Marina Blvd, Building C, Fort Mason Center, San Francisco</div>
-    <div class="gallery-desc">Founded 1987, international contemporary art, global perspective</div>
-    <div class="gallery-note">📋 Primarily invitation-based; send portfolio to art@hainesgallery.com</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Haines%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco / Marin" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Gallery Sausalito</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://gallerysausalito.com" target="_blank" class="gallery-url">gallerysausalito.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Sausalito, CA (Marin County)</div>
-    
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Gallery%20Sausalito" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco / Marin" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">ZK Gallery</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://zkgallery.com" target="_blank" class="gallery-url">zkgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=ZK%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="San Francisco / Marin" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Sarah Shepard Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://sarahshepardgallery.com" target="_blank" class="gallery-url">sarahshepardgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    <div class="gallery-desc">Contemporary art</div>
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Sarah%20Shepard%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Aggregate Space Gallery (ASG)</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://aggregatespacegallery.org" target="_blank" class="gallery-url">aggregatespacegallery.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 801 William St, Oakland</div>
-    <div class="gallery-desc">Contemporary art, experimental, supports risk-taking work</div>
-    <div class="gallery-note">📋 5–6 solo + 2–3 group shows per year</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Aggregate%20Space%20Gallery%20%28ASG%29" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Pro Arts Gallery & Commons</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://proartsgallery.org" target="_blank" class="gallery-url">proartsgallery.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 150 Frank H. Ogawa Plaza, Oakland</div>
-    
-    <div class="gallery-note">📋 Regular; monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Pro%20Arts%20Gallery%20%26%20Commons" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Berkeley Art Center</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://berkeleyartcenter.org" target="_blank" class="gallery-url">berkeleyartcenter.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 1275 Walnut St, Berkeley</div>
-    
-    <div class="gallery-note">📋 2026 Juried Members Exhibition ongoing (6/13–8/15)</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Berkeley%20Art%20Center" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Kala Art Institute</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://kala.org" target="_blank" class="gallery-url">kala.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 2990 San Pablo Ave, Berkeley</div>
-    <div class="gallery-desc">Printmaking, digital media, installation, video</div>
-    <div class="gallery-note">📋 Exhibitions + Residency</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Kala%20Art%20Institute" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Oakland Art Murmur</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://oaklandartmurmur.org" target="_blank" class="gallery-url">oaklandartmurmur.org ↗</a>
-  </div>
-  <div class="card-body">
-    
-    <div class="gallery-desc">Gallery collective, First Fridays</div>
-    <div class="gallery-note">📋 eastbayopenstudios.com/emerging-artists</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Oakland%20Art%20Murmur" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Mercury 20 Gallery</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://mercurytwenty.com" target="_blank" class="gallery-url">mercurytwenty.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 475 25th St, Oakland (Uptown Arts District)</div>
-    <div class="gallery-desc">Artist-run, founded 2006, experimental contemporary art</div>
-    <div class="gallery-note">📋 Open membership applications; also juried exhibition "Beyond Boundaries"</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Mercury%2020%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Gray Loft Gallery</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://grayloftgallery.com" target="_blank" class="gallery-url">grayloftgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 2889 Ford St, Oakland (Jingletown Arts District)</div>
-    <div class="gallery-desc">Converted warehouse, three-floor loft, founded 2012</div>
-    <div class="gallery-note">📋 grayloftgallery.com/call-for-entry (includes annual color-theme juried show)</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Gray%20Loft%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Part 2 Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://part2gallery.com" target="_blank" class="gallery-url">part2gallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 1523b Webster St, Oakland</div>
-    <div class="gallery-desc">Contemporary art，Street / urban culture background</div>
-    <div class="gallery-note">📋 Occasional; email info@part2gallery.com</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Part%202%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">The Compound Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://thecompoundgallery.com" target="_blank" class="gallery-url">thecompoundgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Emeryville (Oakland border)</div>
-    <div class="gallery-desc">18,000 sq ft multi-use arts facility: gallery + print studio + shared workspaces</div>
-    <div class="gallery-note">📋 Occasional; past "Scouting Oakland" themed call; monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=The%20Compound%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Art House Gallery & Cultural Center</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://arthousegallery.org" target="_blank" class="gallery-url">arthousegallery.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Oakland</div>
-    
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Art%20House%20Gallery%20%26%20Cultural%20Center" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Sun Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://sungallery.org" target="_blank" class="gallery-url">sungallery.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Hayward, CA</div>
-    <div class="gallery-desc">Nonprofit community gallery serving the South East Bay</div>
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Sun%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Olive Hyde Art Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://olivehydeartguild.org" target="_blank" class="gallery-url">olivehydeartguild.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Fremont, CA</div>
-    <div class="gallery-desc">City-supported, run by artists association</div>
-    <div class="gallery-note">📋 Regular juried shows; monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Olive%20Hyde%20Art%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">ACCI Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://accigallery.com" target="_blank" class="gallery-url">accigallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Berkeley</div>
-    <div class="gallery-desc">Craft + contemporary art, founded 1971</div>
-    <div class="gallery-note">📋 Occasional; monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=ACCI%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Cube Space Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://berkeleyca.gov" target="_blank" class="gallery-url">berkeleyca.gov ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Downtown Berkeley</div>
-    <div class="gallery-desc">City-supported, focused on emerging/mid-career Bay Area artists</div>
-    <div class="gallery-note">📋 Rotating 3-month exhibitions; monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Cube%20Space%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Faultline Artspace</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://faultlineartspace.com" target="_blank" class="gallery-url">faultlineartspace.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 East Oakland</div>
-    <div class="gallery-desc">Women+ artists, experimental, painting/printmaking/collage</div>
-    <div class="gallery-note">📋 faultlineartspace.com/artist-submissions</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Faultline%20Artspace" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Rock Paper Scissors Collective</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://rpscollective.org" target="_blank" class="gallery-url">rpscollective.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Oakland</div>
-    <div class="gallery-desc">DIY artist collective, fully artist-run</div>
-    <div class="gallery-note">📋 Regular; monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Rock%20Paper%20Scissors%20Collective" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Thelma Harris Art Gallery</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://thelmaharrisartgallery.com" target="_blank" class="gallery-url">thelmaharrisartgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Oakland</div>
-    <div class="gallery-desc">Primarily African American artists, deep community roots</div>
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Thelma%20Harris%20Art%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Abrams Claghorn Gallery</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://abramsclaghorn.com" target="_blank" class="gallery-url">abramsclaghorn.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Albany, CA</div>
-    <div class="gallery-desc">Contemporary art, primarily printmaking</div>
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Abrams%20Claghorn%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">E14 Gallery</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://e14gallery.com" target="_blank" class="gallery-url">e14gallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Oakland</div>
-    
-    <div class="gallery-note">📋 To be confirmed</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=E14%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">JOR Fine Art Gallery</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://jorfineartgallery.com" target="_blank" class="gallery-url">jorfineartgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    <div class="gallery-desc">Contemporary art</div>
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=JOR%20Fine%20Art%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="Peninsula / South Bay" data-open="closed" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">ANNO DOMINI Gallery</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://galleryad.com" target="_blank" class="gallery-url">galleryad.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 366 S 1st St, San Jose (SoFA District)</div>
-    <div class="gallery-desc">Urban contemporary art, founded 2000; street/graffiti/tattoo/skate/zine culture</div>
-    <div class="gallery-note">📋 Occasional; new shows open First Fridays — send portfolio inquiry</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=ANNO%20DOMINI%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="Peninsula / South Bay" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Gallery 9 Los Altos</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://gallery9losaltos.com" target="_blank" class="gallery-url">gallery9losaltos.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 143 Main St, Los Altos, CA</div>
-    <div class="gallery-desc">Cooperative gallery, founded 1973; one of the Peninsula's oldest galleries</div>
-    <div class="gallery-note">📋 Membership application; monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Gallery%209%20Los%20Altos" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="Peninsula / South Bay" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Gallery 24 Los Gatos</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://gallery24losgatos.com" target="_blank" class="gallery-url">gallery24losgatos.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 24 N Santa Cruz Ave, Los Gatos, CA</div>
-    
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Gallery%2024%20Los%20Gatos" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="Peninsula / South Bay" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Whitney Modern</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://whitneymodern.com" target="_blank" class="gallery-url">whitneymodern.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 24 N Santa Cruz Ave, Los Gatos (Templeman Building, 2nd floor, built 1921)</div>
-    
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Whitney%20Modern" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="Peninsula / South Bay" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Bryant Street Gallery Palo Alto</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://bryantstreetgallery.com" target="_blank" class="gallery-url">bryantstreetgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Palo Alto, CA</div>
-    
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Bryant%20Street%20Gallery%20Palo%20Alto" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="Peninsula / South Bay" data-open="open" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Art Ark Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://artarkgallery.com" target="_blank" class="gallery-url">artarkgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 San Jose, CA</div>
-    
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Art%20Ark%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="Peninsula / South Bay" data-open="unknown" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">QD Gallery</h3>
-      <div class="card-badges">  <span class="badge badge-gray">Unknown</span></div>
-    </div>
-    <a href="https://qdgallery.com" target="_blank" class="gallery-url">qdgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    
-    
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=QD%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="Santa Cruz Area" data-open="open" data-stars="3" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Felix Kulpa Gallery</h3>
-      <div class="card-badges">⭐⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://felixkulpa.com" target="_blank" class="gallery-url">felixkulpa.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 107 Elm St, Santa Cruz, CA</div>
-    <div class="gallery-desc">501c3 nonprofit, artist-founded, sculpture garden + indoor exhibitions</div>
-    <div class="gallery-note">📋 Accepting proposal submissions; email art4felix@gmail.com</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Felix%20Kulpa%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="Santa Cruz Area" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">m.k. contemporary art</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://mkcontemporaryart.com" target="_blank" class="gallery-url">mkcontemporaryart.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Santa Cruz, CA</div>
-    
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=m.k.%20contemporary%20art" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="Santa Cruz Area" data-open="closed" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Cabrillo Gallery</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://cabrillogallery.com" target="_blank" class="gallery-url">cabrillogallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Cabrillo College, Santa Cruz</div>
-    
-    <div class="gallery-note">📋 Occasional; monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Cabrillo%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="Santa Cruz Area" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Om Gallery</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://omgallery.com" target="_blank" class="gallery-url">omgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Santa Cruz, CA</div>
-    
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Om%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="North Bay" data-open="open" data-stars="2" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Gallery Route One</h3>
-      <div class="card-badges">⭐⭐  <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://galleryrouteone.org" target="_blank" class="gallery-url">galleryrouteone.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Point Reyes Station, CA</div>
-    <div class="gallery-desc">Contemporary art, Northern California regional nonprofit</div>
-    <div class="gallery-note">📋 galleryrouteone.org/for-artists/call-to-artists/</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Gallery%20Route%20One" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="North Bay" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Gallery 621</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://gallery621.com" target="_blank" class="gallery-url">gallery621.com ↗</a>
-  </div>
-  <div class="card-body">
-    
-    
-    <div class="gallery-note">📋 Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Gallery%20621" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Berggruen Gallery</h3>
-      <div class="card-badges"> <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://berggruen.com" target="_blank" class="gallery-url">berggruen.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 10 Hawthorne St, San Francisco (Downtown)</div>
-    <div class="gallery-desc">SF's top blue-chip gallery; benchmark for modern and contemporary art</div>
-    <div class="gallery-note">📋 Invitation-only</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Berggruen%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Altman Siegel</h3>
-      <div class="card-badges"> <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://altmansiegel.com" target="_blank" class="gallery-url">altmansiegel.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 1150 25th St, San Francisco (Dogpatch, adjacent to MSP campus)</div>
-    <div class="gallery-desc">Biennial-level painting and conceptual art; extremely high academic standard</div>
-    <div class="gallery-note">📋 Invitation-only</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Altman%20Siegel" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="1" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Dolby Chadwick Gallery</h3>
-      <div class="card-badges">⭐ <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://dolbychadwickgallery.com" target="_blank" class="gallery-url">dolbychadwickgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 210 Post St, San Francisco (Downtown)</div>
-    <div class="gallery-desc">Established contemporary gallery; strongly favors oil painting, expressionism, texture, and complex </div>
-    <div class="gallery-note">📋 Invitation-only; proactive portfolio submissions considered</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Dolby%20Chadwick%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Jessica Silverman</h3>
-      <div class="card-badges"> <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://jessicasilvermangallery.com" target="_blank" class="gallery-url">jessicasilvermangallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 488 Ellis St, San Francisco (near Chinatown)</div>
-    <div class="gallery-desc">Currently SF's most prominent contemporary gallery at international art fairs (Art Basel, etc.)</div>
-    <div class="gallery-note">📋 Invitation-only</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Jessica%20Silverman" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Maybaum Gallery</h3>
-      <div class="card-badges"> <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://maybaumgallery.com" target="_blank" class="gallery-url">maybaumgallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 San Francisco Downtown</div>
-    <div class="gallery-desc">Elegant, modern, abstract expressionism; appeals to Bay Area mid-level and tech collector tastes</div>
-    <div class="gallery-note">📋 Invitation-only</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Maybaum%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Brian Gross Fine Art</h3>
-      <div class="card-badges"> <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://briangrossfineart.com" target="_blank" class="gallery-url">briangrossfineart.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 248 Utah St, San Francisco (Potrero Hill, same building as Catharine Clark)</div>
-    <div class="gallery-desc">Minimalism, hard-edge abstraction, spatial form</div>
-    <div class="gallery-note">📋 Invitation-only</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Brian%20Gross%20Fine%20Art" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">George Lawson Gallery</h3>
-      <div class="card-badges"> <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://georgelawsongallery.com" target="_blank" class="gallery-url">georgelawsongallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 San Francisco</div>
-    <div class="gallery-desc">Dedicated to Color Painting and pure abstraction</div>
-    <div class="gallery-note">📋 Invitation-only</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=George%20Lawson%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="⚡ MSP Sub-galleries Watch List" data-open="closed" data-stars="0" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Anglim / Trimble</h3>
-      <div class="card-badges"> <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://anglimtrimble.com" target="_blank" class="gallery-url">anglimtrimble.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 1275 Minnesota St, San Francisco</div>
-    <div class="gallery-desc">Legacy leader in Bay Area conceptual art and abstract expressionism; successor to legendary gallery </div>
-    <div class="gallery-note">📋 Invitation-only</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Anglim%20/%20Trimble" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="⚡ MSP Sub-galleries Watch List" data-open="closed" data-stars="0" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Rena Bransten Gallery</h3>
-      <div class="card-badges"> <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://renabranstengallery.com" target="_blank" class="gallery-url">renabranstengallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 1275 Minnesota St, San Francisco</div>
-    <div class="gallery-desc">High-caliber contemporary painting, cutting-edge installation and conceptual media</div>
-    <div class="gallery-note">📋 Invitation-only</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Rena%20Bransten%20Gallery" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="⚡ MSP Sub-galleries Watch List" data-open="closed" data-stars="0" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Nancy Toomey Fine Art</h3>
-      <div class="card-badges"> <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://nancytoomey.com" target="_blank" class="gallery-url">nancytoomey.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 1275 Minnesota St, San Francisco</div>
-    <div class="gallery-desc">Contemporary abstract painting, light/shadow expression, spatial minimalism</div>
-    <div class="gallery-note">📋 Invitation-only</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Nancy%20Toomey%20Fine%20Art" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="⚡ MSP Sub-galleries Watch List" data-open="closed" data-stars="0" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Municipal Bonds</h3>
-      <div class="card-badges"> <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://municipalbonds.art" target="_blank" class="gallery-url">municipalbonds.art ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 1275 Minnesota St, San Francisco</div>
-    <div class="gallery-desc">Abstract geometry, painting and visual systems encoding; internationally based artists</div>
-    <div class="gallery-note">📋 Invitation-only</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Municipal%20Bonds" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="🤖 Tech, New Media & Interdisciplinary Spaces" data-open="closed" data-stars="1" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Pace Gallery Palo Alto</h3>
-      <div class="card-badges">⭐ <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://pacegallery.com" target="_blank" class="gallery-url">pacegallery.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 229 Hamilton Ave, Palo Alto, CA</div>
-    <div class="gallery-desc">Silicon Valley branch of global blue-chip Pace Gallery; major South Bay art hub</div>
-    <div class="gallery-note">📋 Invitation-only</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Pace%20Gallery%20Palo%20Alto" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="🤖 Tech, New Media & Interdisciplinary Spaces" data-open="closed" data-stars="1" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Qualia Contemporary Art</h3>
-      <div class="card-badges">⭐ <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://qualiacontemporaryart.com" target="_blank" class="gallery-url">qualiacontemporaryart.com ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Palo Alto, CA</div>
-    <div class="gallery-desc">Bridge gallery for Asia-Pacific and international emerging/mid-career artists; very active in recent</div>
-    <div class="gallery-note">📋 Primarily invitation-based; worth proactively reaching out</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Qualia%20Contemporary%20Art" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="🤖 Tech, New Media & Interdisciplinary Spaces" data-open="closed" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Stanford / Cantor Arts Center</h3>
-      <div class="card-badges">  <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://museum.stanford.edu" target="_blank" class="gallery-url">museum.stanford.edu ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 Stanford University, Palo Alto</div>
-    <div class="gallery-desc">Silicon Valley's most active academic center for "digital technology, logic encoding, and contempora</div>
-    <div class="gallery-note">📋 Does not accept submissions</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Stanford%20/%20Cantor%20Arts%20Center" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="🎭 Experimental & Non-profit Spaces" data-open="open" data-stars="1" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">The Lab</h3>
-      <div class="card-badges">⭐ <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-green">🟢 Open Call</span></div>
-    </div>
-    <a href="https://thelab.org" target="_blank" class="gallery-url">thelab.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 2948 16th St, San Francisco (Mission)</div>
-    <div class="gallery-desc">Sound, moving image, radical multimedia and performance art, founded 1983</div>
-    <div class="gallery-note">📋 Regular residency and project calls; monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=The%20Lab" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="🎭 Experimental & Non-profit Spaces" data-open="closed" data-stars="0" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">500 Capp Street（The David Ireland House）</h3>
-      <div class="card-badges"> <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://500cappstreet.org" target="_blank" class="gallery-url">500cappstreet.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 500 Capp St, San Francisco (Mission)</div>
-    <div class="gallery-desc">Conceptual art landmark; explores installation and the logical reorganization of specific physical s</div>
-    <div class="gallery-note">📋 Occasional residency call，Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=500%20Capp%20Street%EF%BC%88The%20David%20Ireland%20House%EF%BC%89" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="🎭 Experimental & Non-profit Spaces" data-open="closed" data-stars="1" data-blue="true">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">CCA Wattis Institute for Contemporary Arts</h3>
-      <div class="card-badges">⭐ <span class="badge badge-blue">Blue-chip</span> <span class="badge badge-red">🔴 Monitor</span></div>
-    </div>
-    <a href="https://wattis.org" target="_blank" class="gallery-url">wattis.org ↗</a>
-  </div>
-  <div class="card-body">
-    <div class="gallery-addr">📍 360 Kansas St, San Francisco (CCA campus, Potrero Hill)</div>
-    <div class="gallery-desc">California College of the Arts' premier contemporary art curatorial and experimental space</div>
-    <div class="gallery-note">📋 Occasional residency / research call，Monitor website</div>
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=CCA%20Wattis%20Institute%20for%20Contemporary%20Arts" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="❌ Excluded Galleries" data-open="unknown" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Decorative / Interior-focused</h3>
-      <div class="card-badges">  <span class="badge badge-gray">Unknown</span></div>
-    </div>
-    
-  </div>
-  <div class="card-body">
-    
-    
-    
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Decorative%20/%20Interior-focused" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="❌ Excluded Galleries" data-open="unknown" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Vanity / Pay-to-hang (low CV value)</h3>
-      <div class="card-badges">  <span class="badge badge-gray">Unknown</span></div>
-    </div>
-    
-  </div>
-  <div class="card-body">
-    
-    
-    
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Vanity%20/%20Pay-to-hang%20%28low%20CV%20value%29" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-
-<div class="card" data-region="❌ Excluded Galleries" data-open="unknown" data-stars="0" data-blue="false">
-  <div class="card-header">
-    <div class="card-title-row">
-      <h3 class="card-name">Possibly closed / in transition</h3>
-      <div class="card-badges">  <span class="badge badge-gray">Unknown</span></div>
-    </div>
-    
-  </div>
-  <div class="card-body">
-    
-    
-    
-    
-  </div>
-  <div class="card-footer">
-    <a href="https://naaaaaaqi.github.io/human-artark/apply/?gallery=Possibly%20closed%20/%20in%20transition" class="apply-btn" target="_blank">Apply →</a>
-  </div>
-</div>
-  </div>
-  
-  
-</div>
-
-<div class="footer">
-  Last updated 2026-06-11 · Curated by hand + AI-assisted status detection ·
-  <a href="https://github.com/NaaaaaaQi/my-gallery-agent" target="_blank">GitHub ↗</a>
-</div>
+<div class="gallery-list" id="gallery-list">
+
+<a class="gallery-row" href="minnesota-street-project/"
+   data-region="San Francisco" data-open="closed" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Minnesota Street Project</span>
+      
+    </div>
+    <div class="row-meta">San Francisco · 1275 Minnesota St, San Francisco (Dogpatch)</div>
+    <span class="row-desc">Arts district with 14 galleries</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://minnesotastreetproject.com" target="_blank" class="row-url">minnesotastreetproject.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="city-art-gallery/"
+   data-region="San Francisco" data-open="open" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">City Art Gallery</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">San Francisco </div>
+    <span class="row-desc">Artist cooperative run by ~200 artists</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://cityartgallery.org" target="_blank" class="row-url">cityartgallery.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="111-minna-gallery/"
+   data-region="San Francisco" data-open="open" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">111 Minna Gallery</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">San Francisco </div>
+    <span class="row-desc">Contemporary art + event space</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://111minnagallery.com" target="_blank" class="row-url">111minnagallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="bryant-street-gallery-sf/"
+   data-region="San Francisco" data-open="closed" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Bryant Street Gallery SF</span>
+      
+    </div>
+    <div class="row-meta">San Francisco </div>
+    <span class="row-desc">Contemporary art; supports first exhibitions for new artists</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://bryantstreet.com" target="_blank" class="row-url">bryantstreet.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="gallery-house/"
+   data-region="San Francisco" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Gallery House</span>
+      
+    </div>
+    <div class="row-meta">San Francisco </div>
+    
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://galleryhouse.art" target="_blank" class="row-url">galleryhouse.art ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="viewpoints-gallery/"
+   data-region="San Francisco" data-open="open" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Viewpoints Gallery</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">San Francisco </div>
+    <span class="row-desc">Artist cooperative</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://viewpointsgallery.com" target="_blank" class="row-url">viewpointsgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="the-main-gallery/"
+   data-region="San Francisco" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">The Main Gallery</span>
+      
+    </div>
+    <div class="row-meta">San Francisco </div>
+    <span class="row-desc">Community gallery with monthly rotating shows</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://themaingallery.org" target="_blank" class="row-url">themaingallery.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="mirus-gallery/"
+   data-region="San Francisco" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Mirus Gallery</span>
+      
+    </div>
+    <div class="row-meta">San Francisco </div>
+    <span class="row-desc">Emerging/mid-career artists, contemporary art, private event venue</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://mirusgallery.com" target="_blank" class="row-url">mirusgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="m-stark-gallery/"
+   data-region="San Francisco" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">M. Stark Gallery</span>
+      
+    </div>
+    <div class="row-meta">San Francisco </div>
+    
+  </div>
+  <div class="row-right">
+    
+    <a href="https://mstarkgallery.com" target="_blank" class="row-url">mstarkgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="pamela-walsh-gallery/"
+   data-region="San Francisco" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Pamela Walsh Gallery</span>
+      
+    </div>
+    <div class="row-meta">San Francisco </div>
+    
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://pamelawalshgallery.com" target="_blank" class="row-url">pamelawalshgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="andra-norris-gallery/"
+   data-region="San Francisco" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Andra Norris Gallery</span>
+      
+    </div>
+    <div class="row-meta">San Francisco </div>
+    <span class="row-desc">Commercial contemporary gallery; artist representation</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://andranorrisgallery.com" target="_blank" class="row-url">andranorrisgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="romer-young-gallery/"
+   data-region="San Francisco" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Romer Young Gallery</span>
+      
+    </div>
+    <div class="row-meta">San Francisco </div>
+    
+  </div>
+  <div class="row-right">
+    
+    <a href="https://romeryounggallery.com" target="_blank" class="row-url">romeryounggallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="chung-24-gallery/"
+   data-region="San Francisco" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Chung 24 Gallery</span>
+      
+    </div>
+    <div class="row-meta">San Francisco </div>
+    
+  </div>
+  <div class="row-right">
+    
+    <a href="https://chung24gallery.com" target="_blank" class="row-url">chung24gallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="fraenkel-gallery/"
+   data-region="San Francisco" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Fraenkel Gallery</span>
+      
+    </div>
+    <div class="row-meta">San Francisco </div>
+    <span class="row-desc">Top-tier gallery, primarily photography</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://fraenkelgallery.com" target="_blank" class="row-url">fraenkelgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="hosfelt-gallery/"
+   data-region="San Francisco" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Hosfelt Gallery</span>
+      
+    </div>
+    <div class="row-meta">San Francisco · 260 Utah St, San Francisco (Potrero Hill)</div>
+    <span class="row-desc">Contemporary art, international scope, 9,000 sq ft industrial space</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://hosfeltgallery.com" target="_blank" class="row-url">hosfeltgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="somarts-cultural-center/"
+   data-region="San Francisco" data-open="unknown" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot unknown"></span>
+      <span class="row-name">SOMArts Cultural Center</span>
+      
+    </div>
+    <div class="row-meta">San Francisco · 934 Brannan St, San Francisco (SoMa)</div>
+    <span class="row-desc">Community-driven, social justice focus, multicultural</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://somarts.org" target="_blank" class="row-url">somarts.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="catharine-clark-gallery/"
+   data-region="San Francisco" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Catharine Clark Gallery</span>
+      
+    </div>
+    <div class="row-meta">San Francisco · 248 Utah St, San Francisco (Potrero Hill)</div>
+    <span class="row-desc">Contemporary art, experimental, founded 1991</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://cclarkgallery.com" target="_blank" class="row-url">cclarkgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="gallery-16/"
+   data-region="San Francisco" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Gallery 16</span>
+      
+    </div>
+    <div class="row-meta">San Francisco · 501 3rd St, San Francisco (SoMa)</div>
+    <span class="row-desc">Experimental contemporary art, print publishing</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://gallery16.com" target="_blank" class="row-url">gallery16.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="ratio-3/"
+   data-region="San Francisco" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Ratio 3</span>
+      
+    </div>
+    <div class="row-meta">San Francisco · 1447 Stevenson St, San Francisco (Mission)</div>
+    <span class="row-desc">Conceptual art, mid-career and emerging artists</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://ratio3.org" target="_blank" class="row-url">ratio3.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="voss-gallery/"
+   data-region="San Francisco" data-open="open" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Voss Gallery</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">San Francisco · 2211 Market St, San Francisco (Castro)</div>
+    <span class="row-desc">Contemporary art, supports emerging artists</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://vossgallery.art" target="_blank" class="row-url">vossgallery.art ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="arc-gallery/"
+   data-region="San Francisco" data-open="open" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">ARC Gallery</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">San Francisco · 1246 Folsom St, San Francisco (SoMa)</div>
+    <span class="row-desc">Artist cooperative gallery, juried exhibitions</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://arc-sf.com" target="_blank" class="row-url">arc-sf.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="san-francisco-women-artists-sfwa/"
+   data-region="San Francisco" data-open="open" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">San Francisco Women Artists (SFWA)</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">San Francisco · 647 Irving St, San Francisco (Inner Sunset)</div>
+    <span class="row-desc">Women artists organization</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://sfwomenartists.org" target="_blank" class="row-url">sfwomenartists.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="sf-arts-commission-gallery/"
+   data-region="San Francisco" data-open="unknown" data-stars="1" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot unknown"></span>
+      <span class="row-name">SF Arts Commission Gallery</span>
+      
+    </div>
+    <div class="row-meta">San Francisco </div>
+    <span class="row-desc">Government-supported, public art</span>
+  </div>
+  <div class="row-right">
+    ⭐
+    <a href="https://sfartscommission.org" target="_blank" class="row-url">sfartscommission.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="haines-gallery/"
+   data-region="San Francisco / Marin" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Haines Gallery</span>
+      
+    </div>
+    <div class="row-meta">San Francisco / Marin · 2 Marina Blvd, Building C, Fort Mason Center, San </div>
+    <span class="row-desc">Founded 1987, international contemporary art, global perspective</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://hainesgallery.com" target="_blank" class="row-url">hainesgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="gallery-sausalito/"
+   data-region="San Francisco / Marin" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Gallery Sausalito</span>
+      
+    </div>
+    <div class="row-meta">San Francisco / Marin · Sausalito, CA (Marin County)</div>
+    
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://gallerysausalito.com" target="_blank" class="row-url">gallerysausalito.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="zk-gallery/"
+   data-region="San Francisco / Marin" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">ZK Gallery</span>
+      
+    </div>
+    <div class="row-meta">San Francisco / Marin </div>
+    
+  </div>
+  <div class="row-right">
+    
+    <a href="https://zkgallery.com" target="_blank" class="row-url">zkgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="sarah-shepard-gallery/"
+   data-region="San Francisco / Marin" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Sarah Shepard Gallery</span>
+      
+    </div>
+    <div class="row-meta">San Francisco / Marin </div>
+    <span class="row-desc">Contemporary art</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://sarahshepardgallery.com" target="_blank" class="row-url">sarahshepardgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="aggregate-space-gallery-asg/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Aggregate Space Gallery (ASG)</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · 801 William St, Oakland</div>
+    <span class="row-desc">Contemporary art, experimental, supports risk-taking work</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://aggregatespacegallery.org" target="_blank" class="row-url">aggregatespacegallery.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="pro-arts-gallery-commons/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Pro Arts Gallery & Commons</span>
+      
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · 150 Frank H. Ogawa Plaza, Oakland</div>
+    
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://proartsgallery.org" target="_blank" class="row-url">proartsgallery.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="berkeley-art-center/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Berkeley Art Center</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · 1275 Walnut St, Berkeley</div>
+    
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://berkeleyartcenter.org" target="_blank" class="row-url">berkeleyartcenter.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="kala-art-institute/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Kala Art Institute</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · 2990 San Pablo Ave, Berkeley</div>
+    <span class="row-desc">Printmaking, digital media, installation, video</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://kala.org" target="_blank" class="row-url">kala.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="oakland-art-murmur/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Oakland Art Murmur</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) </div>
+    <span class="row-desc">Gallery collective, First Fridays</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://oaklandartmurmur.org" target="_blank" class="row-url">oaklandartmurmur.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="mercury-20-gallery/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Mercury 20 Gallery</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · 475 25th St, Oakland (Uptown Arts District)</div>
+    <span class="row-desc">Artist-run, founded 2006, experimental contemporary art</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://mercurytwenty.com" target="_blank" class="row-url">mercurytwenty.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="gray-loft-gallery/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Gray Loft Gallery</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · 2889 Ford St, Oakland (Jingletown Arts District)</div>
+    <span class="row-desc">Converted warehouse, three-floor loft, founded 2012</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://grayloftgallery.com" target="_blank" class="row-url">grayloftgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="part-2-gallery/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Part 2 Gallery</span>
+      
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · 1523b Webster St, Oakland</div>
+    <span class="row-desc">Contemporary art，Street / urban culture background</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://part2gallery.com" target="_blank" class="row-url">part2gallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="the-compound-gallery/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">The Compound Gallery</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · Emeryville (Oakland border)</div>
+    <span class="row-desc">18,000 sq ft multi-use arts facility: gallery + print studio + shared workspaces</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://thecompoundgallery.com" target="_blank" class="row-url">thecompoundgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="art-house-gallery-cultural-center/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Art House Gallery & Cultural Center</span>
+      
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · Oakland</div>
+    
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://arthousegallery.org" target="_blank" class="row-url">arthousegallery.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="sun-gallery/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Sun Gallery</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · Hayward, CA</div>
+    <span class="row-desc">Nonprofit community gallery serving the South East Bay</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://sungallery.org" target="_blank" class="row-url">sungallery.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="olive-hyde-art-gallery/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Olive Hyde Art Gallery</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · Fremont, CA</div>
+    <span class="row-desc">City-supported, run by artists association</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://olivehydeartguild.org" target="_blank" class="row-url">olivehydeartguild.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="acci-gallery/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">ACCI Gallery</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · Berkeley</div>
+    <span class="row-desc">Craft + contemporary art, founded 1971</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://accigallery.com" target="_blank" class="row-url">accigallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="cube-space-gallery/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Cube Space Gallery</span>
+      
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · Downtown Berkeley</div>
+    <span class="row-desc">City-supported, focused on emerging/mid-career Bay Area artists</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://berkeleyca.gov" target="_blank" class="row-url">berkeleyca.gov ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="faultline-artspace/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Faultline Artspace</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · East Oakland</div>
+    <span class="row-desc">Women+ artists, experimental, painting/printmaking/collage</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://faultlineartspace.com" target="_blank" class="row-url">faultlineartspace.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="rock-paper-scissors-collective/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="open" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Rock Paper Scissors Collective</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · Oakland</div>
+    <span class="row-desc">DIY artist collective, fully artist-run</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://rpscollective.org" target="_blank" class="row-url">rpscollective.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="thelma-harris-art-gallery/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Thelma Harris Art Gallery</span>
+      
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · Oakland</div>
+    <span class="row-desc">Primarily African American artists, deep community roots</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://thelmaharrisartgallery.com" target="_blank" class="row-url">thelmaharrisartgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="abrams-claghorn-gallery/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Abrams Claghorn Gallery</span>
+      
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · Albany, CA</div>
+    <span class="row-desc">Contemporary art, primarily printmaking</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://abramsclaghorn.com" target="_blank" class="row-url">abramsclaghorn.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="e14-gallery/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">E14 Gallery</span>
+      
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) · Oakland</div>
+    
+  </div>
+  <div class="row-right">
+    
+    <a href="https://e14gallery.com" target="_blank" class="row-url">e14gallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="jor-fine-art-gallery/"
+   data-region="East Bay (Oakland / Berkeley)" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">JOR Fine Art Gallery</span>
+      
+    </div>
+    <div class="row-meta">East Bay (Oakland / Berkeley) </div>
+    <span class="row-desc">Contemporary art</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://jorfineartgallery.com" target="_blank" class="row-url">jorfineartgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="anno-domini-gallery/"
+   data-region="Peninsula / South Bay" data-open="closed" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">ANNO DOMINI Gallery</span>
+      
+    </div>
+    <div class="row-meta">Peninsula / South Bay · 366 S 1st St, San Jose (SoFA District)</div>
+    <span class="row-desc">Urban contemporary art, founded 2000; street/graffiti/tattoo/skate/zine culture</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://galleryad.com" target="_blank" class="row-url">galleryad.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="gallery-9-los-altos/"
+   data-region="Peninsula / South Bay" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Gallery 9 Los Altos</span>
+      
+    </div>
+    <div class="row-meta">Peninsula / South Bay · 143 Main St, Los Altos, CA</div>
+    <span class="row-desc">Cooperative gallery, founded 1973; one of the Peninsula's oldest galleries</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://gallery9losaltos.com" target="_blank" class="row-url">gallery9losaltos.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="gallery-24-los-gatos/"
+   data-region="Peninsula / South Bay" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Gallery 24 Los Gatos</span>
+      
+    </div>
+    <div class="row-meta">Peninsula / South Bay · 24 N Santa Cruz Ave, Los Gatos, CA</div>
+    
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://gallery24losgatos.com" target="_blank" class="row-url">gallery24losgatos.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="whitney-modern/"
+   data-region="Peninsula / South Bay" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Whitney Modern</span>
+      
+    </div>
+    <div class="row-meta">Peninsula / South Bay · 24 N Santa Cruz Ave, Los Gatos (Templeman Building</div>
+    
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://whitneymodern.com" target="_blank" class="row-url">whitneymodern.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="bryant-street-gallery-palo-alto/"
+   data-region="Peninsula / South Bay" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Bryant Street Gallery Palo Alto</span>
+      
+    </div>
+    <div class="row-meta">Peninsula / South Bay · Palo Alto, CA</div>
+    
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://bryantstreetgallery.com" target="_blank" class="row-url">bryantstreetgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="art-ark-gallery/"
+   data-region="Peninsula / South Bay" data-open="open" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Art Ark Gallery</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">Peninsula / South Bay · San Jose, CA</div>
+    
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://artarkgallery.com" target="_blank" class="row-url">artarkgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="qd-gallery/"
+   data-region="Peninsula / South Bay" data-open="unknown" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot unknown"></span>
+      <span class="row-name">QD Gallery</span>
+      
+    </div>
+    <div class="row-meta">Peninsula / South Bay </div>
+    
+  </div>
+  <div class="row-right">
+    
+    <a href="https://qdgallery.com" target="_blank" class="row-url">qdgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="felix-kulpa-gallery/"
+   data-region="Santa Cruz Area" data-open="open" data-stars="3" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Felix Kulpa Gallery</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">Santa Cruz Area · 107 Elm St, Santa Cruz, CA</div>
+    <span class="row-desc">501c3 nonprofit, artist-founded, sculpture garden + indoor exhibitions</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐⭐
+    <a href="https://felixkulpa.com" target="_blank" class="row-url">felixkulpa.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="m-k-contemporary-art/"
+   data-region="Santa Cruz Area" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">m.k. contemporary art</span>
+      
+    </div>
+    <div class="row-meta">Santa Cruz Area · Santa Cruz, CA</div>
+    
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://mkcontemporaryart.com" target="_blank" class="row-url">mkcontemporaryart.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="cabrillo-gallery/"
+   data-region="Santa Cruz Area" data-open="closed" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Cabrillo Gallery</span>
+      
+    </div>
+    <div class="row-meta">Santa Cruz Area · Cabrillo College, Santa Cruz</div>
+    
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://cabrillogallery.com" target="_blank" class="row-url">cabrillogallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="om-gallery/"
+   data-region="Santa Cruz Area" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Om Gallery</span>
+      
+    </div>
+    <div class="row-meta">Santa Cruz Area · Santa Cruz, CA</div>
+    
+  </div>
+  <div class="row-right">
+    
+    <a href="https://omgallery.com" target="_blank" class="row-url">omgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="gallery-route-one/"
+   data-region="North Bay" data-open="open" data-stars="2" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">Gallery Route One</span>
+      <span class="badge-open">Open Call</span>
+    </div>
+    <div class="row-meta">North Bay · Point Reyes Station, CA</div>
+    <span class="row-desc">Contemporary art, Northern California regional nonprofit</span>
+  </div>
+  <div class="row-right">
+    ⭐⭐
+    <a href="https://galleryrouteone.org" target="_blank" class="row-url">galleryrouteone.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="gallery-621/"
+   data-region="North Bay" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Gallery 621</span>
+      
+    </div>
+    <div class="row-meta">North Bay </div>
+    
+  </div>
+  <div class="row-right">
+    
+    <a href="https://gallery621.com" target="_blank" class="row-url">gallery621.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="berggruen-gallery/"
+   data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Berggruen Gallery</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🔵 Blue-chip & Established Contemporary Galleries · 10 Hawthorne St, San Francisco (Downtown)</div>
+    <span class="row-desc">SF's top blue-chip gallery; benchmark for modern and contemporary art</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://berggruen.com" target="_blank" class="row-url">berggruen.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="altman-siegel/"
+   data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Altman Siegel</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🔵 Blue-chip & Established Contemporary Galleries · 1150 25th St, San Francisco (Dogpatch, adjacent to</div>
+    <span class="row-desc">Biennial-level painting and conceptual art; extremely high academic standard</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://altmansiegel.com" target="_blank" class="row-url">altmansiegel.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="dolby-chadwick-gallery/"
+   data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="1" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Dolby Chadwick Gallery</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🔵 Blue-chip & Established Contemporary Galleries · 210 Post St, San Francisco (Downtown)</div>
+    <span class="row-desc">Established contemporary gallery; strongly favors oil painting, expressionism, t</span>
+  </div>
+  <div class="row-right">
+    ⭐
+    <a href="https://dolbychadwickgallery.com" target="_blank" class="row-url">dolbychadwickgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="jessica-silverman/"
+   data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Jessica Silverman</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🔵 Blue-chip & Established Contemporary Galleries · 488 Ellis St, San Francisco (near Chinatown)</div>
+    <span class="row-desc">Currently SF's most prominent contemporary gallery at international art fairs (A</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://jessicasilvermangallery.com" target="_blank" class="row-url">jessicasilvermangallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="maybaum-gallery/"
+   data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Maybaum Gallery</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🔵 Blue-chip & Established Contemporary Galleries · San Francisco Downtown</div>
+    <span class="row-desc">Elegant, modern, abstract expressionism; appeals to Bay Area mid-level and tech </span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://maybaumgallery.com" target="_blank" class="row-url">maybaumgallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="brian-gross-fine-art/"
+   data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Brian Gross Fine Art</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🔵 Blue-chip & Established Contemporary Galleries · 248 Utah St, San Francisco (Potrero Hill, same bui</div>
+    <span class="row-desc">Minimalism, hard-edge abstraction, spatial form</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://briangrossfineart.com" target="_blank" class="row-url">briangrossfineart.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="george-lawson-gallery/"
+   data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">George Lawson Gallery</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🔵 Blue-chip & Established Contemporary Galleries · San Francisco</div>
+    <span class="row-desc">Dedicated to Color Painting and pure abstraction</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://georgelawsongallery.com" target="_blank" class="row-url">georgelawsongallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="anglim-trimble/"
+   data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Anglim / Trimble</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🔵 Blue-chip & Established Contemporary Galleries · 1275 Minnesota St, San Francisco</div>
+    <span class="row-desc">Legacy leader in Bay Area conceptual art and abstract expressionism; successor t</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://anglimtrimble.com" target="_blank" class="row-url">anglimtrimble.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="rena-bransten-gallery/"
+   data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Rena Bransten Gallery</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🔵 Blue-chip & Established Contemporary Galleries · 1275 Minnesota St, San Francisco</div>
+    <span class="row-desc">High-caliber contemporary painting, cutting-edge installation and conceptual med</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://renabranstengallery.com" target="_blank" class="row-url">renabranstengallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="nancy-toomey-fine-art/"
+   data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Nancy Toomey Fine Art</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🔵 Blue-chip & Established Contemporary Galleries · 1275 Minnesota St, San Francisco</div>
+    <span class="row-desc">Contemporary abstract painting, light/shadow expression, spatial minimalism</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://nancytoomey.com" target="_blank" class="row-url">nancytoomey.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="municipal-bonds/"
+   data-region="🔵 Blue-chip & Established Contemporary Galleries" data-open="closed" data-stars="0" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Municipal Bonds</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🔵 Blue-chip & Established Contemporary Galleries · 1275 Minnesota St, San Francisco</div>
+    <span class="row-desc">Abstract geometry, painting and visual systems encoding; internationally based a</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://municipalbonds.art" target="_blank" class="row-url">municipalbonds.art ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="pace-gallery-palo-alto/"
+   data-region="🤖 Tech, New Media & Interdisciplinary Spaces" data-open="closed" data-stars="1" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Pace Gallery Palo Alto</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🤖 Tech, New Media & Interdisciplinary Spaces · 229 Hamilton Ave, Palo Alto, CA</div>
+    <span class="row-desc">Silicon Valley branch of global blue-chip Pace Gallery; major South Bay art hub</span>
+  </div>
+  <div class="row-right">
+    ⭐
+    <a href="https://pacegallery.com" target="_blank" class="row-url">pacegallery.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="qualia-contemporary-art/"
+   data-region="🤖 Tech, New Media & Interdisciplinary Spaces" data-open="closed" data-stars="1" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Qualia Contemporary Art</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🤖 Tech, New Media & Interdisciplinary Spaces · Palo Alto, CA</div>
+    <span class="row-desc">Bridge gallery for Asia-Pacific and international emerging/mid-career artists; v</span>
+  </div>
+  <div class="row-right">
+    ⭐
+    <a href="https://qualiacontemporaryart.com" target="_blank" class="row-url">qualiacontemporaryart.com ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="stanford-cantor-arts-center/"
+   data-region="🤖 Tech, New Media & Interdisciplinary Spaces" data-open="closed" data-stars="0" data-blue="false">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">Stanford / Cantor Arts Center</span>
+      
+    </div>
+    <div class="row-meta">🤖 Tech, New Media & Interdisciplinary Spaces · Stanford University, Palo Alto</div>
+    <span class="row-desc">Silicon Valley's most active academic center for "digital technology, logic enco</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://museum.stanford.edu" target="_blank" class="row-url">museum.stanford.edu ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="the-lab/"
+   data-region="🎭 Experimental & Non-profit Spaces" data-open="open" data-stars="1" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot open"></span>
+      <span class="row-name">The Lab</span>
+      <span class="badge-open">Open Call</span><span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🎭 Experimental & Non-profit Spaces · 2948 16th St, San Francisco (Mission)</div>
+    <span class="row-desc">Sound, moving image, radical multimedia and performance art, founded 1983</span>
+  </div>
+  <div class="row-right">
+    ⭐
+    <a href="https://thelab.org" target="_blank" class="row-url">thelab.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="500-capp-street-the-david-ireland-house/"
+   data-region="🎭 Experimental & Non-profit Spaces" data-open="closed" data-stars="0" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">500 Capp Street（The David Ireland House）</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🎭 Experimental & Non-profit Spaces · 500 Capp St, San Francisco (Mission)</div>
+    <span class="row-desc">Conceptual art landmark; explores installation and the logical reorganization of</span>
+  </div>
+  <div class="row-right">
+    
+    <a href="https://500cappstreet.org" target="_blank" class="row-url">500cappstreet.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+<a class="gallery-row" href="cca-wattis-institute-for-contemporary-arts/"
+   data-region="🎭 Experimental & Non-profit Spaces" data-open="closed" data-stars="1" data-blue="true">
+  <div class="row-left">
+    <div class="row-name-line">
+      <span class="dot closed"></span>
+      <span class="row-name">CCA Wattis Institute for Contemporary Arts</span>
+      <span class="badge-blue">Blue-chip</span>
+    </div>
+    <div class="row-meta">🎭 Experimental & Non-profit Spaces · 360 Kansas St, San Francisco (CCA campus, Potrero </div>
+    <span class="row-desc">California College of the Arts' premier contemporary art curatorial and experime</span>
+  </div>
+  <div class="row-right">
+    ⭐
+    <a href="https://wattis.org" target="_blank" class="row-url">wattis.org ↗</a>
+    <span class="row-arrow">→</span>
+  </div>
+</a>
+</div>
+
+<footer>
+  <span>Human ArtArk</span>
+  <div class="footer-links">
+    <a href="/human-artark/">Home</a>
+    <a href="/human-artark/artists/">Artists</a>
+    <a href="/human-artark/apply/">Apply</a>
+    <a href="https://github.com/NaaaaaaQi/my-gallery-agent" target="_blank">Data source ↗</a>
+  </div>
+</footer>
 
 <script>
-const grid    = document.getElementById('gallery-grid');
-const search  = document.getElementById('search');
-const region  = document.getElementById('region-filter');
-const counter = document.getElementById('count-display');
-const btns    = document.querySelectorAll('.filter-btn');
+const list   = document.getElementById('gallery-list');
+const search = document.getElementById('search');
+const region = document.getElementById('region-filter');
+const counter= document.getElementById('count-display');
+const btns   = document.querySelectorAll('.filter-btn');
 let activeFilter = 'all';
 
-function applyFilters() {
-  const q   = search.value.toLowerCase();
+function filter() {
+  const q = search.value.toLowerCase();
   const reg = region.value;
-  let visible = 0;
-
-  grid.querySelectorAll('.card').forEach(card => {
-    const text   = card.textContent.toLowerCase();
-    const open   = card.dataset.open;
-    const stars  = parseInt(card.dataset.stars);
-    const blue   = card.dataset.blue === 'true';
-    const cRegion = card.dataset.region;
-
-    const matchQ      = !q || text.includes(q);
-    const matchRegion = !reg || cRegion === reg;
-    const matchFilter =
-      activeFilter === 'all'     ? true :
-      activeFilter === 'open'    ? open === 'open' :
-      activeFilter === 'stars3'  ? stars === 3 :
-      activeFilter === 'bluechip'? blue :
-      true;
-
-    const show = matchQ && matchRegion && matchFilter;
-    card.classList.toggle('hidden', !show);
-    if (show) visible++;
+  let vis = 0;
+  list.querySelectorAll('.gallery-row').forEach(row => {
+    const text  = row.textContent.toLowerCase();
+    const open  = row.dataset.open;
+    const stars = +row.dataset.stars;
+    const blue  = row.dataset.blue === 'true';
+    const rg    = row.dataset.region;
+    const ok =
+      (!q   || text.includes(q)) &&
+      (!reg || rg === reg) &&
+      (activeFilter === 'all'      ? true :
+       activeFilter === 'open'     ? open === 'open' :
+       activeFilter === 'stars3'   ? stars === 3 :
+       activeFilter === 'bluechip' ? blue : true);
+    row.classList.toggle('hidden', !ok);
+    if (ok) vis++;
   });
-
-  counter.textContent = visible + ' results';
+  counter.textContent = vis + ' results';
 }
-
-search.addEventListener('input', applyFilters);
-region.addEventListener('change', applyFilters);
-
-btns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    btns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activeFilter = btn.dataset.filter;
-    applyFilters();
-  });
-});
-
-applyFilters();
+search.addEventListener('input', filter);
+region.addEventListener('change', filter);
+btns.forEach(b => b.addEventListener('click', () => {
+  btns.forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  activeFilter = b.dataset.filter;
+  filter();
+}));
+filter();
 </script>
 </body>
 </html>

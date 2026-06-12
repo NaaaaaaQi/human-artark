@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>City Art Gallery — Human ArtArk</title>
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black: #000; --white: #fff; --gray-100: #f8f8f8;
+  --gray-200: #e8e8e8; --gray-400: #999; --gray-600: #555; --gray-800: #222;
+  --font-serif: 'Georgia','Times New Roman',serif;
+  --font-sans:  'Helvetica Neue','Helvetica','Arial',sans-serif;
+}
+html { font-size: 16px; }
+body { font-family: var(--font-sans); color: var(--black); background: var(--white);
+       -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+/* NAV */
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 56px;
+       background: var(--white); border-bottom: 1px solid var(--gray-200);
+       display: flex; align-items: center; padding: 0 32px; }
+.nav-logo { font-family: var(--font-serif); font-size: 17px; font-weight: normal;
+            letter-spacing: 0.01em; margin-right: auto; }
+.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-links a { font-size: 13px; color: var(--gray-600); transition: color 0.15s; }
+.nav-links a:hover { color: var(--black); }
+.nav-cta { font-size: 13px !important; font-weight: 600; color: var(--white) !important;
+           background: var(--black); padding: 8px 18px !important; transition: opacity 0.15s; }
+.nav-cta:hover { opacity: 0.75; }
+
+/* BUTTONS */
+.btn-primary { font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+               background: var(--black); color: var(--white); padding: 14px 28px;
+               transition: opacity 0.15s; display: inline-block; }
+.btn-primary:hover { opacity: 0.75; }
+.btn-outline { font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+               background: var(--white); color: var(--black); padding: 13px 28px;
+               border: 1px solid var(--black); transition: all 0.15s; display: inline-block; }
+.btn-outline:hover { background: var(--black); color: var(--white); }
+.btn-text { font-size: 13px; color: var(--gray-600); border-bottom: 1px solid var(--gray-400);
+            padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; display: inline-block; }
+.btn-text:hover { color: var(--black); border-color: var(--black); }
+
+/* OPEN DOT */
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.dot.open { background: #1aaa55; }
+.dot.closed { background: var(--gray-400); }
+.dot.unknown { background: var(--gray-400); }
+
+@media (max-width: 768px) {
+  .nav { padding: 0 20px; }
+  .nav-links { gap: 16px; }
+}
+
+
+.page { margin-top: 56px; }
+
+.gallery-hero {
+  padding: 64px 80px 56px;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 48px;
+}
+.gallery-hero-left { flex: 1; }
+.breadcrumb {
+  font-size: 12px; color: var(--gray-400); letter-spacing: 0.05em;
+  margin-bottom: 24px; display: flex; align-items: center; gap: 8px;
+}
+.breadcrumb a { color: var(--gray-400); transition: color 0.15s; }
+.breadcrumb a:hover { color: var(--black); }
+.gallery-name {
+  font-family: var(--font-serif);
+  font-size: clamp(32px,4vw,56px);
+  font-weight: normal; letter-spacing: -0.02em; line-height: 1.08;
+  margin-bottom: 12px;
+}
+.gallery-region { font-size: 13px; color: var(--gray-400); margin-bottom: 20px; }
+.gallery-status {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #1aaa55; margin-bottom: 32px;
+}
+.gallery-desc { font-size: 16px; line-height: 1.75; color: var(--gray-600); max-width: 560px; }
+
+.gallery-hero-right {
+  display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; min-width: 200px;
+}
+.hero-action-primary { align-self: stretch; text-align: center; }
+.hero-action-secondary { align-self: stretch; text-align: center; }
+
+.detail-grid {
+  display: grid; grid-template-columns: 2fr 1fr;
+  border-bottom: 1px solid var(--gray-200);
+}
+.detail-main {
+  padding: 56px 80px; border-right: 1px solid var(--gray-200);
+}
+.detail-sidebar {
+  padding: 56px 48px;
+}
+
+.section-label {
+  font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gray-400); margin-bottom: 24px;
+}
+.open-call-status {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+}
+.open-call-title {
+  font-family: var(--font-serif); font-size: 22px; font-weight: normal;
+}
+.open-call-badge {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 4px 12px; border: 1px solid;
+  color: #1aaa55;
+  border-color: #1aaa55;
+}
+.detail-note {
+  font-size: 15px; line-height: 1.75; color: var(--gray-800);
+  margin-bottom: 32px; padding-left: 20px;
+  border-left: 2px solid var(--gray-200);
+}
+.apply-cta {
+  background: var(--gray-100); border: 1px solid var(--gray-200);
+  padding: 28px 32px; margin-top: 32px;
+}
+.apply-cta-title {
+  font-family: var(--font-serif); font-size: 18px; font-weight: normal; margin-bottom: 8px;
+}
+.apply-cta-body { font-size: 14px; color: var(--gray-600); margin-bottom: 20px; line-height: 1.6; }
+
+.info-block { margin-bottom: 32px; }
+.info-label {
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gray-400); margin-bottom: 8px;
+}
+.info-value { font-size: 14px; line-height: 1.65; color: var(--gray-800); }
+.ext-link { color: var(--black); border-bottom: 1px solid var(--gray-400); padding-bottom: 1px; transition: border-color 0.15s; }
+.ext-link:hover { border-color: var(--black); }
+
+.related-section {
+  padding: 48px 80px;
+  border-bottom: 1px solid var(--gray-200);
+}
+.related-section h2 {
+  font-family: var(--font-serif); font-size: 20px; font-weight: normal; margin-bottom: 24px;
+}
+.related-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--gray-200); }
+.related-card {
+  background: var(--white); padding: 24px 28px;
+  display: flex; flex-direction: column; gap: 6px; cursor: pointer;
+  transition: background 0.15s;
+}
+.related-card:hover { background: var(--gray-100); }
+.related-name-line { display: flex; align-items: center; gap: 8px; }
+.related-name { font-size: 14px; font-weight: 500; }
+.related-region { font-size: 12px; color: var(--gray-400); }
+.related-arrow { font-size: 14px; color: var(--gray-400); margin-top: auto; }
+.badge-open-sm {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #1aaa55; border: 1px solid rgba(26,170,85,0.3); padding: 2px 6px;
+}
+
+footer { padding: 40px 80px; display: flex; justify-content: space-between; align-items: center;
+          border-top: 1px solid var(--gray-200); font-family: var(--font-serif); font-size: 15px; }
+footer .footer-links { display: flex; gap: 28px; }
+footer .footer-links a { font-family: var(--font-sans); font-size: 12px; color: var(--gray-600); transition: color 0.15s; }
+footer .footer-links a:hover { color: var(--black); }
+
+@media (max-width: 768px) {
+  .gallery-hero { padding: 40px 24px 32px; flex-direction: column; }
+  .gallery-hero-right { flex-direction: row; flex-wrap: wrap; }
+  .detail-grid { grid-template-columns: 1fr; }
+  .detail-main { padding: 40px 24px; border-right: none; border-bottom: 1px solid var(--gray-200); }
+  .detail-sidebar { padding: 40px 24px; }
+  .related-section { padding: 40px 24px; }
+  .related-grid { grid-template-columns: 1fr; }
+  footer { padding: 32px 24px; flex-direction: column; gap: 20px; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/human-artark/">Human ArtArk</a>
+  <div class="nav-links">
+    <a href="/human-artark/galleries/">Galleries</a>
+    <a href="/human-artark/artists/">Artists</a>
+    <a class="nav-cta" href="/human-artark/apply/?gallery=City%20Art%20Gallery">Apply</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="gallery-hero">
+    <div class="gallery-hero-left">
+      <div class="breadcrumb">
+        <a href="/human-artark/">Home</a> /
+        <a href="/human-artark/galleries/">Galleries</a> /
+        <span>City Art Gallery</span>
+      </div>
+      <h1 class="gallery-name">City Art Gallery</h1>
+      <div class="gallery-region">San Francisco</div>
+      <div class="gallery-status">
+        <span class="dot open"></span>
+        Open Call
+      </div>
+      <p class="gallery-desc">Artist cooperative run by ~200 artists</p>
+    </div>
+    <div class="gallery-hero-right">
+      <a class="btn-primary hero-action-primary" href="/human-artark/apply/?gallery=City%20Art%20Gallery">Apply to This Gallery</a>
+      <a class="btn-outline hero-action-secondary" href="https://cityartgallery.org" target="_blank">Visit Website ↗</a>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+    <div class="detail-main">
+      <p class="section-label">Open Call Status</p>
+      <div class="open-call-status">
+        <h2 class="open-call-title">Open Call</h2>
+        <span class="open-call-badge">Open Call</span>
+      </div>
+      <p class="detail-note">Accepting new member applications; apply to join as a cooperative member</p>
+
+      
+
+      
+    <div class="info-block">
+      <div class="info-label">Notes</div>
+      <div class="info-value">Artist cooperative, low barrier to entry — highly recommended for emerging artists</div>
+    </div>
+
+      <div class="apply-cta">
+        <div class="apply-cta-title">Ready to apply to City Art Gallery?</div>
+        <p class="apply-cta-body">Attach your artist profile and send a collaboration inquiry directly. We handle the outreach on your behalf.</p>
+        <a class="btn-primary" href="/human-artark/apply/?gallery=City%20Art%20Gallery">Send Application</a>
+      </div>
+    </div>
+
+    <div class="detail-sidebar">
+      <div class="info-block">
+        <div class="info-label">Website</div>
+        <div class="info-value"><a href="https://cityartgallery.org" target="_blank" class="ext-link">cityartgallery.org ↗</a></div>
+      </div>
+      <div class="info-block">
+        <div class="info-label">Location</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-block">
+        <div class="info-label">Region</div>
+        <div class="info-value">San Francisco</div>
+      </div>
+      <div class="info-block">
+        <div class="info-label">Emerging-artist friendliness</div>
+        <div class="info-value">⭐⭐⭐</div>
+      </div>
+      <div class="info-block">
+        <div class="info-label">Newsletter</div>
+        <div class="info-value">Not subscribed</div>
+      </div>
+      <div class="info-block">
+        <div class="info-label">Type</div>
+        <div class="info-value">Emerging-friendly</div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="related-section">
+    <h2>More galleries in San Francisco</h2>
+    <div class="related-grid">
+  <a class="related-card" href="../minnesota-street-project/">
+    <div class="related-name-line"><span class="dot closed"></span><span class="related-name">Minnesota Street Project</span></div>
+    <div class="related-region">San Francisco</div>
+    <div class="related-arrow">→</div>
+  </a>
+  <a class="related-card" href="../111-minna-gallery/">
+    <div class="related-name-line"><span class="dot open"></span><span class="related-name">111 Minna Gallery</span><span class="badge-open-sm">Open Call</span></div>
+    <div class="related-region">San Francisco</div>
+    <div class="related-arrow">→</div>
+  </a>
+  <a class="related-card" href="../bryant-street-gallery-sf/">
+    <div class="related-name-line"><span class="dot closed"></span><span class="related-name">Bryant Street Gallery SF</span></div>
+    <div class="related-region">San Francisco</div>
+    <div class="related-arrow">→</div>
+  </a></div>
+  </div>
+  
+</div>
+
+<footer>
+  <span>Human ArtArk</span>
+  <div class="footer-links">
+    <a href="/human-artark/">Home</a>
+    <a href="/human-artark/galleries/">All Galleries</a>
+    <a href="/human-artark/apply/">Apply</a>
+  </div>
+</footer>
+
+</body>
+</html>
