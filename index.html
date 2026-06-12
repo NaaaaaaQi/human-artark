@@ -3,747 +3,571 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Human ArtArk — The Platform for Emerging Artists</title>
+<title>Human ArtArk — The Global Platform for Artists</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --black:      #000;
-  --white:      #fff;
-  --gray-100:   #f8f8f8;
-  --gray-200:   #e8e8e8;
-  --gray-400:   #999;
-  --gray-600:   #555;
-  --gray-800:   #222;
-  --font-serif: 'Georgia', 'Times New Roman', 'Times', serif;
-  --font-sans:  'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  --black: #000; --white: #fff;
+  --gray-100: #f8f8f8; --gray-200: #e8e8e8;
+  --gray-400: #999; --gray-600: #555; --gray-800: #222;
+  --font-serif: 'Georgia','Times New Roman',serif;
+  --font-sans: 'Helvetica Neue','Helvetica','Arial',sans-serif;
 }
-
 html { font-size: 16px; }
-body {
-  font-family: var(--font-sans);
-  color: var(--black);
-  background: var(--white);
-  -webkit-font-smoothing: antialiased;
-}
-
+body { font-family: var(--font-sans); color: var(--black); background: var(--white);
+       -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 
-/* ─────────────────────────────
-   NAV
-───────────────────────────── */
-.nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  height: 56px;
-  background: var(--white);
-  border-bottom: 1px solid var(--gray-200);
-  display: flex; align-items: center;
-  padding: 0 32px;
-  gap: 0;
-}
-.nav-logo {
-  font-family: var(--font-serif);
-  font-size: 17px;
-  font-weight: normal;
-  letter-spacing: 0.01em;
-  color: var(--black);
-  margin-right: auto;
-}
-.nav-links {
-  display: flex; align-items: center;
-  gap: 28px;
-}
-.nav-links a {
-  font-size: 13px;
-  color: var(--gray-600);
-  letter-spacing: 0.01em;
-  transition: color 0.15s;
-}
+/* NAV */
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 56px;
+       background: var(--white); border-bottom: 1px solid var(--gray-200);
+       display: flex; align-items: center; padding: 0 32px; }
+.nav-logo { font-family: var(--font-serif); font-size: 17px; font-weight: normal; margin-right: auto; }
+.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-links a { font-size: 13px; color: var(--gray-600); transition: color 0.15s; }
 .nav-links a:hover { color: var(--black); }
-.nav-cta {
-  margin-left: 28px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--white) !important;
-  background: var(--black);
-  padding: 8px 18px;
-  letter-spacing: 0.02em;
-  transition: opacity 0.15s;
-}
+.nav-cta { font-size: 13px !important; font-weight: 600; color: var(--white) !important;
+           background: var(--black); padding: 8px 18px; transition: opacity 0.15s; }
 .nav-cta:hover { opacity: 0.75; }
 
-/* ─────────────────────────────
-   HERO
-───────────────────────────── */
+/* HERO — full viewport, text-only, editorial */
 .hero {
   margin-top: 56px;
+  min-height: calc(100vh - 56px);
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-height: calc(100vh - 56px);
 }
 .hero-left {
-  display: flex; flex-direction: column;
-  justify-content: center;
+  display: flex; flex-direction: column; justify-content: flex-end;
   padding: 80px 64px 80px 80px;
   border-right: 1px solid var(--gray-200);
 }
-.hero-eyebrow {
-  font-size: 11px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--gray-400);
-  margin-bottom: 32px;
-}
-.hero-title {
-  font-family: var(--font-serif);
-  font-size: clamp(40px, 4.5vw, 72px);
-  font-weight: normal;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-  margin-bottom: 32px;
-  color: var(--black);
-}
-.hero-title em {
-  font-style: italic;
-}
-.hero-body {
-  font-size: 16px;
-  line-height: 1.75;
-  color: var(--gray-600);
-  max-width: 440px;
-  margin-bottom: 48px;
-}
-.hero-actions {
-  display: flex; gap: 16px; align-items: center;
-}
-.btn-primary {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  background: var(--black);
-  color: var(--white);
-  padding: 14px 28px;
-  transition: opacity 0.15s;
-  display: inline-block;
-}
+.hero-eyebrow { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+                color: var(--gray-400); margin-bottom: 32px; }
+.hero-title { font-family: var(--font-serif); font-size: clamp(44px,5.5vw,80px);
+              font-weight: normal; line-height: 1.04; letter-spacing: -0.025em;
+              margin-bottom: 36px; }
+.hero-title em { font-style: italic; }
+.hero-body { font-size: 16px; line-height: 1.75; color: var(--gray-600);
+             max-width: 460px; margin-bottom: 52px; }
+.hero-actions { display: flex; gap: 16px; align-items: center; }
+.btn-primary { font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+               background: var(--black); color: var(--white); padding: 14px 28px;
+               transition: opacity 0.15s; display: inline-block; }
 .btn-primary:hover { opacity: 0.75; }
-.btn-text {
-  font-size: 13px;
-  color: var(--gray-600);
-  letter-spacing: 0.03em;
-  border-bottom: 1px solid var(--gray-400);
-  padding-bottom: 1px;
-  transition: color 0.15s, border-color 0.15s;
-}
+.btn-text { font-size: 13px; color: var(--gray-600); border-bottom: 1px solid var(--gray-400);
+            padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
 .btn-text:hover { color: var(--black); border-color: var(--black); }
 
+/* Hero right: 2x2 artist grid */
 .hero-right {
-  position: relative;
-  overflow: hidden;
-  background: var(--gray-100);
+  display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+  border-left: 0;
 }
-.hero-right img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: center top;
+.hero-artwork {
+  position: relative; overflow: hidden; background: var(--gray-100);
+  border-bottom: 1px solid var(--gray-200); border-right: 1px solid var(--gray-200);
 }
-.hero-artwork-credit {
-  position: absolute; bottom: 24px; right: 24px;
-  font-size: 11px;
-  color: rgba(255,255,255,0.8);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.hero-artwork:nth-child(2n) { border-right: none; }
+.hero-artwork:nth-child(3), .hero-artwork:nth-child(4) { border-bottom: none; }
+.hero-artwork img { width: 100%; height: 100%; object-fit: cover;
+                    transition: transform 0.6s ease; }
+.hero-artwork:hover img { transform: scale(1.04); }
+.hero-artwork-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 10px 14px;
+  background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+  font-size: 11px; color: rgba(255,255,255,0.85); letter-spacing: 0.05em;
+  opacity: 0; transition: opacity 0.2s;
 }
+.hero-artwork:hover .hero-artwork-caption { opacity: 1; }
 
-/* ─────────────────────────────
-   TICKER / MARQUEE
-───────────────────────────── */
-.ticker {
-  border-top: 1px solid var(--gray-200);
-  border-bottom: 1px solid var(--gray-200);
-  padding: 12px 0;
-  overflow: hidden;
-  white-space: nowrap;
-}
-.ticker-inner {
-  display: inline-block;
-  animation: ticker 30s linear infinite;
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--gray-400);
-}
+/* TICKER */
+.ticker { border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200);
+          padding: 12px 0; overflow: hidden; white-space: nowrap; }
+.ticker-inner { display: inline-block; animation: ticker 36s linear infinite;
+                font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-400); }
 .ticker-inner span { margin: 0 40px; }
-@keyframes ticker {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-/* ─────────────────────────────
-   MISSION
-───────────────────────────── */
-.mission {
-  padding: 100px 80px;
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: center;
-  border-bottom: 1px solid var(--gray-200);
-}
-.mission-label {
-  font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--gray-400); margin-bottom: 32px;
-}
-.mission-statement {
-  font-family: var(--font-serif);
-  font-size: clamp(22px, 2.5vw, 34px);
-  font-weight: normal;
-  line-height: 1.55;
-  color: var(--black);
-  letter-spacing: -0.01em;
-}
+/* VISION — 4 pillars */
+.pillars { display: grid; grid-template-columns: repeat(4,1fr);
+           border-bottom: 1px solid var(--gray-200); }
+.pillar { padding: 56px 40px; border-right: 1px solid var(--gray-200); }
+.pillar:last-child { border-right: none; }
+.pillar-icon { font-size: 28px; margin-bottom: 20px; }
+.pillar-title { font-family: var(--font-serif); font-size: 20px; font-weight: normal;
+                margin-bottom: 14px; line-height: 1.2; }
+.pillar-body { font-size: 13px; color: var(--gray-600); line-height: 1.7; }
+
+/* MISSION */
+.mission { padding: 100px 80px; max-width: 860px; margin: 0 auto;
+           text-align: center; border-bottom: 1px solid var(--gray-200); }
+.mission-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+                 color: var(--gray-400); margin-bottom: 32px; }
+.mission-statement { font-family: var(--font-serif); font-size: clamp(22px,2.5vw,34px);
+                     font-weight: normal; line-height: 1.55; letter-spacing: -0.01em; }
 .mission-statement em { font-style: italic; }
 
-/* ─────────────────────────────
-   FEATURED WORKS
-───────────────────────────── */
-.section-header {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 48px 80px 32px;
-  border-bottom: 1px solid var(--gray-200);
-}
-.section-title {
-  font-family: var(--font-serif);
-  font-size: 24px; font-weight: normal;
-}
-.section-link {
-  font-size: 13px; color: var(--gray-600);
-  border-bottom: 1px solid var(--gray-400);
-  padding-bottom: 1px;
-  transition: color 0.15s, border-color 0.15s;
-}
+/* WORKS — 4 col marketplace grid */
+.section-header { display: flex; justify-content: space-between; align-items: baseline;
+                  padding: 48px 80px 32px; border-bottom: 1px solid var(--gray-200); }
+.section-title { font-family: var(--font-serif); font-size: 24px; font-weight: normal; }
+.section-link { font-size: 13px; color: var(--gray-600); border-bottom: 1px solid var(--gray-400);
+                padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
 .section-link:hover { color: var(--black); border-color: var(--black); }
 
-.artworks-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border-bottom: 1px solid var(--gray-200);
-}
-.artwork-item {
-  border-right: 1px solid var(--gray-200);
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-.artwork-item:last-child { border-right: none; }
-.artwork-item:hover { opacity: 0.88; }
-.artwork-img {
-  width: 100%;
-  aspect-ratio: 4/5;
-  object-fit: cover;
-  background: var(--gray-100);
-  display: block;
-}
-.artwork-info {
-  padding: 16px 20px 20px;
-  border-top: 1px solid var(--gray-200);
-}
-.artwork-artist {
-  font-size: 13px; font-weight: 600;
-  margin-bottom: 4px;
-}
-.artwork-title {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 13px;
-  color: var(--gray-600);
-  margin-bottom: 4px;
-}
-.artwork-meta {
-  font-size: 12px; color: var(--gray-400);
-}
+.works-grid { display: grid; grid-template-columns: repeat(4,1fr);
+              border-bottom: 1px solid var(--gray-200); }
+.work-card { border-right: 1px solid var(--gray-200); overflow: hidden;
+             display: flex; flex-direction: column; }
+.work-card:last-child { border-right: none; }
+.work-card:hover .work-img { transform: scale(1.04); }
+.work-img-wrap { overflow: hidden; background: var(--gray-100); }
+.work-img { width: 100%; aspect-ratio: 3/4; object-fit: cover;
+            transition: transform 0.5s ease; display: block; }
+.work-info { padding: 14px 18px 20px; border-top: 1px solid var(--gray-200); flex: 1;
+             display: flex; flex-direction: column; justify-content: space-between; }
+.work-artist { font-size: 12px; color: var(--gray-400); margin-bottom: 4px; }
+.work-title { font-family: var(--font-serif); font-style: italic; font-size: 14px;
+              margin-bottom: 4px; }
+.work-medium { font-size: 12px; color: var(--gray-400); margin-bottom: 12px; }
+.work-price { font-size: 14px; font-weight: 600; }
+.work-buy { display: inline-block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+            color: var(--white); background: var(--black); padding: 7px 16px;
+            margin-top: 8px; transition: opacity 0.15s; }
+.work-buy:hover { opacity: 0.7; }
 
-/* ─────────────────────────────
-   HOW IT WORKS  (3 columns)
-───────────────────────────── */
-.how {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border-bottom: 1px solid var(--gray-200);
-}
-.how-step {
-  padding: 64px 48px;
-  border-right: 1px solid var(--gray-200);
-}
+/* HOW IT WORKS */
+.how { display: grid; grid-template-columns: repeat(4,1fr);
+       border-bottom: 1px solid var(--gray-200); }
+.how-step { padding: 56px 40px; border-right: 1px solid var(--gray-200); }
 .how-step:last-child { border-right: none; }
-.how-num {
-  font-family: var(--font-serif);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  color: var(--gray-400);
-  margin-bottom: 20px;
-  text-transform: uppercase;
-}
-.how-title {
-  font-family: var(--font-serif);
-  font-size: 22px; font-weight: normal;
-  margin-bottom: 16px; line-height: 1.3;
-}
-.how-body {
-  font-size: 14px; color: var(--gray-600);
-  line-height: 1.7;
-}
+.how-num { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+           color: var(--gray-400); margin-bottom: 20px; }
+.how-title { font-family: var(--font-serif); font-size: 20px; font-weight: normal;
+             margin-bottom: 14px; line-height: 1.3; }
+.how-body { font-size: 13px; color: var(--gray-600); line-height: 1.7; }
 
-/* ─────────────────────────────
-   ARTIST FEATURE
-───────────────────────────── */
-.feature {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid var(--gray-200);
-  min-height: 560px;
-}
-.feature-image {
-  position: relative;
-  overflow: hidden;
-  background: var(--gray-100);
-  border-right: 1px solid var(--gray-200);
-}
-.feature-image img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-}
-.feature-content {
-  display: flex; flex-direction: column;
-  justify-content: center;
-  padding: 80px;
-}
-.feature-label {
-  font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--gray-400); margin-bottom: 24px;
-}
-.feature-name {
-  font-family: var(--font-serif);
-  font-size: 40px; font-weight: normal;
-  line-height: 1.1; margin-bottom: 8px;
-}
-.feature-role {
-  font-size: 13px; color: var(--gray-400);
-  letter-spacing: 0.03em; margin-bottom: 32px;
-}
-.feature-quote {
-  font-family: var(--font-serif);
-  font-size: 18px; line-height: 1.7;
-  font-style: italic;
-  color: var(--gray-800);
-  border-left: 2px solid var(--black);
-  padding-left: 24px;
-  margin-bottom: 40px;
-}
-.feature-cv {
-  display: flex; flex-direction: column; gap: 8px;
-  margin-bottom: 40px;
-}
-.feature-cv-item {
-  display: flex; gap: 16px;
-  font-size: 13px;
-}
-.feature-cv-year { color: var(--gray-400); min-width: 40px; }
-.feature-cv-text { color: var(--gray-800); line-height: 1.5; }
+/* ARTISTS PREVIEW STRIP */
+.artists-strip { display: grid; grid-template-columns: repeat(7,1fr);
+                 border-bottom: 1px solid var(--gray-200); }
+.artist-chip { border-right: 1px solid var(--gray-200); overflow: hidden; cursor: pointer; }
+.artist-chip:last-child { border-right: none; }
+.artist-chip:hover .chip-img { transform: scale(1.06); }
+.chip-img-wrap { overflow: hidden; aspect-ratio: 2/3; background: var(--gray-100); }
+.chip-img { width: 100%; height: 100%; object-fit: cover; object-position: top;
+            transition: transform 0.5s ease; display: block; }
+.chip-info { padding: 12px 14px 16px; border-top: 1px solid var(--gray-200); }
+.chip-name { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+.chip-medium { font-size: 11px; color: var(--gray-400); }
 
-/* ─────────────────────────────
-   GALLERIES PREVIEW
-───────────────────────────── */
-.galleries-section {
-  border-bottom: 1px solid var(--gray-200);
-}
-.galleries-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-}
-.gallery-row {
-  display: flex; align-items: center;
-  padding: 20px 80px;
-  border-bottom: 1px solid var(--gray-200);
-  border-right: 1px solid var(--gray-200);
-  gap: 16px;
-  transition: background 0.15s;
-  cursor: pointer;
-}
+/* GALLERIES */
+.galleries-section { border-bottom: 1px solid var(--gray-200); }
+.galleries-list { display: grid; grid-template-columns: repeat(2,1fr); }
+.gallery-row { display: flex; align-items: center; gap: 16px;
+               padding: 18px 80px; border-bottom: 1px solid var(--gray-200);
+               border-right: 1px solid var(--gray-200); cursor: pointer;
+               transition: background 0.15s; }
 .gallery-row:nth-child(even) { border-right: none; }
 .gallery-row:hover { background: var(--gray-100); }
-.gallery-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
+.gallery-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .gallery-dot.open { background: #1aaa55; }
 .gallery-dot.closed { background: var(--gray-400); }
 .gallery-row-name { font-size: 14px; font-weight: 500; flex: 1; }
-.gallery-row-region { font-size: 12px; color: var(--gray-400); letter-spacing: 0.03em; }
-.gallery-row-apply {
-  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--gray-600);
-  border-bottom: 1px solid var(--gray-400);
-  padding-bottom: 1px;
-  opacity: 0;
-  transition: opacity 0.15s;
-}
+.gallery-row-region { font-size: 12px; color: var(--gray-400); }
+.gallery-row-apply { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+                     color: var(--gray-600); border-bottom: 1px solid var(--gray-400);
+                     padding-bottom: 1px; opacity: 0; transition: opacity 0.15s; }
 .gallery-row:hover .gallery-row-apply { opacity: 1; }
+.galleries-footer { padding: 32px 80px; display: flex; justify-content: center; }
 
-.galleries-footer {
-  padding: 32px 80px;
-  display: flex; justify-content: center;
-  border-bottom: 1px solid var(--gray-200);
-}
-
-/* ─────────────────────────────
-   EDITORIAL / STATS
-───────────────────────────── */
-.stats-band {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border-bottom: 1px solid var(--gray-200);
-}
-.stat-col {
-  padding: 56px 64px;
-  border-right: 1px solid var(--gray-200);
-}
+/* STATS */
+.stats-band { display: grid; grid-template-columns: repeat(4,1fr);
+              border-bottom: 1px solid var(--gray-200); }
+.stat-col { padding: 56px 48px; border-right: 1px solid var(--gray-200); }
 .stat-col:last-child { border-right: none; }
-.stat-number {
-  font-family: var(--font-serif);
-  font-size: 64px; font-weight: normal;
-  line-height: 1; margin-bottom: 12px;
-  letter-spacing: -0.03em;
-}
-.stat-desc {
-  font-size: 14px; color: var(--gray-600); line-height: 1.6;
-}
+.stat-number { font-family: var(--font-serif); font-size: 60px; font-weight: normal;
+               line-height: 1; margin-bottom: 12px; letter-spacing: -0.03em; }
+.stat-desc { font-size: 13px; color: var(--gray-600); line-height: 1.6; }
 
-/* ─────────────────────────────
-   MANIFESTO
-───────────────────────────── */
-.manifesto {
-  padding: 120px 80px;
-  max-width: 800px;
-  margin: 0 auto;
-  border-bottom: 1px solid var(--gray-200);
-}
-.manifesto-body {
-  font-family: var(--font-serif);
-  font-size: clamp(18px, 2vw, 26px);
-  line-height: 1.65;
-  color: var(--black);
-  margin-bottom: 40px;
-}
-.manifesto-body p + p { margin-top: 24px; }
-.manifesto-sig {
-  font-size: 12px; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--gray-400);
-}
+/* MANIFESTO */
+.manifesto { padding: 120px 80px; max-width: 800px; margin: 0 auto;
+             border-bottom: 1px solid var(--gray-200); }
+.manifesto-body { font-family: var(--font-serif); font-size: clamp(18px,2vw,26px);
+                  line-height: 1.65; color: var(--black); }
+.manifesto-body p + p { margin-top: 28px; }
+.manifesto-sig { margin-top: 48px; font-size: 12px; letter-spacing: 0.12em;
+                 text-transform: uppercase; color: var(--gray-400); }
 
-/* ─────────────────────────────
-   FOOTER
-───────────────────────────── */
-.footer {
-  padding: 40px 80px;
-  display: grid;
-  grid-template-columns: 1fr auto auto auto;
-  align-items: center; gap: 40px;
-  border-top: 1px solid var(--gray-200);
-}
-.footer-logo {
-  font-family: var(--font-serif);
-  font-size: 15px; font-weight: normal;
-}
-.footer-link {
-  font-size: 12px; color: var(--gray-600);
-  transition: color 0.15s;
-}
-.footer-link:hover { color: var(--black); }
+/* CTA BAND */
+.cta-band { display: grid; grid-template-columns: 1fr 1fr;
+            border-bottom: 1px solid var(--gray-200); }
+.cta-half { padding: 72px 80px; border-right: 1px solid var(--gray-200); }
+.cta-half:last-child { border-right: none; }
+.cta-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+             color: var(--gray-400); margin-bottom: 20px; }
+.cta-title { font-family: var(--font-serif); font-size: 32px; font-weight: normal;
+             line-height: 1.2; margin-bottom: 16px; }
+.cta-body { font-size: 14px; color: var(--gray-600); line-height: 1.7;
+            max-width: 400px; margin-bottom: 32px; }
 
-/* ─────────────────────────────
-   RESPONSIVE
-───────────────────────────── */
-@media (max-width: 960px) {
-  .hero { grid-template-columns: 1fr; min-height: auto; }
-  .hero-left { padding: 60px 32px; border-right: none; border-bottom: 1px solid var(--gray-200); }
-  .hero-right { height: 60vw; }
-  .section-header { padding: 40px 32px 24px; }
-  .artworks-grid { grid-template-columns: 1fr; }
-  .artwork-item { border-right: none; border-bottom: 1px solid var(--gray-200); }
-  .how { grid-template-columns: 1fr; }
-  .how-step { border-right: none; border-bottom: 1px solid var(--gray-200); padding: 48px 32px; }
-  .feature { grid-template-columns: 1fr; }
-  .feature-image { height: 60vw; border-right: none; border-bottom: 1px solid var(--gray-200); }
-  .feature-content { padding: 48px 32px; }
-  .galleries-list { grid-template-columns: 1fr; }
-  .gallery-row { padding: 18px 32px; border-right: none; }
-  .gallery-row:nth-child(even) { border-right: none; }
-  .stats-band { grid-template-columns: 1fr; }
-  .stat-col { border-right: none; border-bottom: 1px solid var(--gray-200); padding: 48px 32px; }
-  .manifesto { padding: 80px 32px; }
-  .mission { padding: 80px 32px; }
-  .galleries-footer { padding: 32px; }
-  .footer { grid-template-columns: 1fr 1fr; padding: 32px; row-gap: 16px; }
+/* FOOTER */
+.footer { padding: 40px 80px; display: flex; justify-content: space-between; align-items: center;
+          border-top: 1px solid var(--gray-200); }
+.footer-logo { font-family: var(--font-serif); font-size: 15px; font-weight: normal; }
+.footer-links { display: flex; gap: 28px; }
+.footer-links a { font-size: 12px; color: var(--gray-600); transition: color 0.15s; }
+.footer-links a:hover { color: var(--black); }
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+  .pillars { grid-template-columns: repeat(2,1fr); }
+  .pillar:nth-child(2) { border-right: none; }
+  .pillar:nth-child(3) { border-top: 1px solid var(--gray-200); }
+  .works-grid { grid-template-columns: repeat(2,1fr); }
+  .work-card:nth-child(2) { border-right: none; }
+  .work-card:nth-child(3) { border-top: 1px solid var(--gray-200); }
+  .how { grid-template-columns: repeat(2,1fr); }
+  .how-step:nth-child(2) { border-right: none; }
+  .how-step:nth-child(3) { border-top: 1px solid var(--gray-200); }
+  .stats-band { grid-template-columns: repeat(2,1fr); }
+  .stat-col:nth-child(2) { border-right: none; }
+  .stat-col:nth-child(3) { border-top: 1px solid var(--gray-200); }
+  .artists-strip { grid-template-columns: repeat(4,1fr); }
+  .artist-chip:nth-child(4) { border-right: none; }
+  .artist-chip:nth-child(n+5) { display: none; }
+}
+@media (max-width: 768px) {
   .nav { padding: 0 20px; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-left { padding: 48px 24px; border-right: none; border-bottom: 1px solid var(--gray-200); }
+  .hero-right { grid-template-columns: 1fr 1fr; min-height: 60vw; }
+  .section-header { padding: 40px 24px 24px; }
+  .pillars, .how, .stats-band { grid-template-columns: 1fr; }
+  .pillar, .how-step, .stat-col { border-right: none; border-top: 1px solid var(--gray-200); }
+  .pillar:first-child, .how-step:first-child, .stat-col:first-child { border-top: none; }
+  .works-grid, .artists-strip { grid-template-columns: repeat(2,1fr); }
+  .galleries-list { grid-template-columns: 1fr; }
+  .gallery-row { padding: 16px 24px; border-right: none; }
+  .galleries-footer { padding: 32px 24px; }
+  .mission, .manifesto { padding: 72px 24px; }
+  .cta-band { grid-template-columns: 1fr; }
+  .cta-half { padding: 56px 24px; border-right: none; border-bottom: 1px solid var(--gray-200); }
+  .footer { padding: 32px 24px; flex-direction: column; gap: 16px; align-items: flex-start; }
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav">
-  <a class="nav-logo" href="/">Human ArtArk</a>
+  <a class="nav-logo" href="/human-artark/">Human ArtArk</a>
   <div class="nav-links">
-    <a href="galleries/">Galleries</a>
-    <a href="artists/">Artists</a>
-    <a href="apply/">Apply</a>
-    <a class="nav-cta" href="apply/">Apply to Gallery</a>
+    <a href="/human-artark/galleries/">Galleries</a>
+    <a href="/human-artark/artists/">Artists</a>
+    <a href="/human-artark/apply/">Apply</a>
+    <a class="nav-cta" href="/human-artark/apply/">Join as Artist</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <p class="hero-eyebrow">Human ArtArk · Bay Area</p>
+    <p class="hero-eyebrow">Human ArtArk · Global Platform</p>
     <h1 class="hero-title">
-      The platform<br>
-      built for<br>
-      <em>human artists.</em>
+      Where artists<br>
+      meet the world<br>
+      that <em>shows</em> them.
     </h1>
     <p class="hero-body">
-      In an era when images are infinite and authorship is uncertain, Human ArtArk exists to connect artists who make things with hands and intent — to the galleries that show them.
+      A global platform for artists to build gallery-ready profiles, discover open calls and residencies worldwide, sell their work directly, and get seen by the institutions that matter.
     </p>
     <div class="hero-actions">
-      <a class="btn-primary" href="galleries/">Browse Galleries</a>
-      <a class="btn-text" href="artists/">Meet the artists →</a>
+      <a class="btn-primary" href="/human-artark/artists/">Explore Artists</a>
+      <a class="btn-text" href="/human-artark/galleries/">Browse Galleries →</a>
     </div>
   </div>
   <div class="hero-right">
-    <img
-      src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/ede101aa-a281-42cd-85a8-c01edeb403b4/Screenshot+2026-05-25+at+4.10.39%E2%80%AFPM.png"
-      alt="Reciprocate — Qinaus, Oil on Canvas, 2025"
-      loading="eager"
-    />
-    <div class="hero-artwork-credit">Qinaus · Reciprocate · 2025</div>
+    <!-- 4 artist artworks in a 2x2 grid -->
+    <a class="hero-artwork" href="/human-artark/artists/kai-nakamura/">
+      <img src="https://picsum.photos/seed/knakamura-fog1/600/700" alt="Kai Nakamura" loading="eager" />
+      <div class="hero-artwork-caption">Kai Nakamura · Photography · Berkeley</div>
+    </a>
+    <a class="hero-artwork" href="/human-artark/artists/amara-diallo/">
+      <img src="https://picsum.photos/seed/adiallo-woven/600/700" alt="Amara Diallo" loading="eager" />
+      <div class="hero-artwork-caption">Amara Diallo · Installation · Oakland</div>
+    </a>
+    <a class="hero-artwork" href="/human-artark/artists/sofia-reyes/">
+      <img src="https://picsum.photos/seed/sreyes-figura1/600/700" alt="Sofia Reyes" loading="eager" />
+      <div class="hero-artwork-caption">Sofia Reyes · Painting · SF</div>
+    </a>
+    <a class="hero-artwork" href="/human-artark/artists/theo-okafor/">
+      <img src="https://picsum.photos/seed/tokafor-shadow/600/700" alt="Theo Okafor" loading="eager" />
+      <div class="hero-artwork-caption">Theo Okafor · Performance · Oakland</div>
+    </a>
   </div>
 </section>
 
 <!-- TICKER -->
 <div class="ticker">
   <div class="ticker-inner">
-    <span>Minnesota Street Project</span>
-    <span>·</span>
-    <span>111 Minna Gallery</span>
-    <span>·</span>
-    <span>Mercury 20</span>
-    <span>·</span>
-    <span>Gray Loft Gallery</span>
-    <span>·</span>
-    <span>ARC Gallery</span>
-    <span>·</span>
-    <span>Kala Art Institute</span>
-    <span>·</span>
-    <span>Berkeley Art Center</span>
-    <span>·</span>
-    <span>Romer Young Gallery</span>
-    <span>·</span>
-    <span>SOMArts</span>
-    <span>·</span>
-    <span>Pro Arts</span>
-    <span>·</span>
-    <span>Catharine Clark Gallery</span>
-    <span>·</span>
-    <span>Viewpoints Gallery</span>
-    <span>·</span>
-    <span>The Main Gallery</span>
-    <span>·</span>
-    <!-- repeat for seamless loop -->
-    <span>Minnesota Street Project</span>
-    <span>·</span>
-    <span>111 Minna Gallery</span>
-    <span>·</span>
-    <span>Mercury 20</span>
-    <span>·</span>
-    <span>Gray Loft Gallery</span>
-    <span>·</span>
-    <span>ARC Gallery</span>
-    <span>·</span>
-    <span>Kala Art Institute</span>
-    <span>·</span>
-    <span>Berkeley Art Center</span>
-    <span>·</span>
-    <span>Romer Young Gallery</span>
-    <span>·</span>
-    <span>SOMArts</span>
-    <span>·</span>
-    <span>Pro Arts</span>
-    <span>·</span>
-    <span>Catharine Clark Gallery</span>
-    <span>·</span>
-    <span>Viewpoints Gallery</span>
-    <span>·</span>
-    <span>The Main Gallery</span>
-    <span>·</span>
+    <span>Minnesota Street Project</span><span>·</span>
+    <span>Hauser & Wirth</span><span>·</span>
+    <span>Gray Loft Gallery</span><span>·</span>
+    <span>Pro Arts</span><span>·</span>
+    <span>Kala Art Institute</span><span>·</span>
+    <span>SOMArts</span><span>·</span>
+    <span>Mercury 20</span><span>·</span>
+    <span>Pacific Art League</span><span>·</span>
+    <span>Aggregate Space</span><span>·</span>
+    <span>Berkeley Art Center</span><span>·</span>
+    <span>The Lab SF</span><span>·</span>
+    <span>Catharine Clark</span><span>·</span>
+    <span>ARC Gallery</span><span>·</span>
+    <span>Rock Paper Scissors</span><span>·</span>
+    <span>Romer Young</span><span>·</span>
+    <span>Minnesota Street Project</span><span>·</span>
+    <span>Hauser & Wirth</span><span>·</span>
+    <span>Gray Loft Gallery</span><span>·</span>
+    <span>Pro Arts</span><span>·</span>
+    <span>Kala Art Institute</span><span>·</span>
+    <span>SOMArts</span><span>·</span>
+    <span>Mercury 20</span><span>·</span>
+    <span>Pacific Art League</span><span>·</span>
+    <span>Aggregate Space</span><span>·</span>
+    <span>Berkeley Art Center</span><span>·</span>
+    <span>The Lab SF</span><span>·</span>
+    <span>Catharine Clark</span><span>·</span>
+    <span>ARC Gallery</span><span>·</span>
+    <span>Rock Paper Scissors</span><span>·</span>
+    <span>Romer Young</span><span>·</span>
+  </div>
+</div>
+
+<!-- 4 PILLARS -->
+<div class="pillars">
+  <div class="pillar">
+    <div class="pillar-icon">🎨</div>
+    <h3 class="pillar-title">Artist Profiles</h3>
+    <p class="pillar-body">Every artist gets a permanent, gallery-ready profile page — portfolio, CV, statement, and selected works in one shareable link.</p>
+  </div>
+  <div class="pillar">
+    <div class="pillar-icon">🏛</div>
+    <h3 class="pillar-title">Gallery Applications</h3>
+    <p class="pillar-body">Browse open calls and submit directly to galleries worldwide. Your profile is attached automatically — one click to apply.</p>
+  </div>
+  <div class="pillar">
+    <div class="pillar-icon">🌍</div>
+    <h3 class="pillar-title">Residency Discovery</h3>
+    <p class="pillar-body">Find residency opportunities globally — from week-long intensives to year-long studio programs — filtered by medium, location, and deadline.</p>
+  </div>
+  <div class="pillar">
+    <div class="pillar-icon">🛒</div>
+    <h3 class="pillar-title">Sell Your Work</h3>
+    <p class="pillar-body">Collectors browse artist profiles and purchase works directly. No gallery commission, no middleman — the artist receives the full benefit of every sale.</p>
   </div>
 </div>
 
 <!-- MISSION -->
 <div class="mission">
-  <p class="mission-label">Our mission</p>
+  <p class="mission-label">Our Vision</p>
   <p class="mission-statement">
-    Every year, thousands of artists in the Bay Area create work of genuine consequence — and most galleries never hear from them. Human ArtArk is the infrastructure that closes that gap: a curated database of galleries, a professional profile for every artist, and a direct channel to the people who decide what gets shown.
+    Human-made art is irreplaceable evidence of a specific consciousness at a specific moment in time. Human ArtArk exists to ensure that work reaches the galleries, collectors, and institutions capable of recognizing it — <em>regardless of where the artist is from.</em>
   </p>
 </div>
 
-<!-- FEATURED WORKS -->
+<!-- FEATURED WORKS FOR SALE -->
 <div>
   <div class="section-header">
-    <h2 class="section-title">Works by platform artists</h2>
-    <a class="section-link" href="artists/">View all artists</a>
+    <h2 class="section-title">Works available</h2>
+    <a class="section-link" href="/human-artark/artists/">View all artists</a>
   </div>
-  <div class="artworks-grid">
-    <a href="artists/qinaus/" class="artwork-item">
-      <img class="artwork-img"
-        src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/6c0bf380-faf9-46c3-8c7b-10b0a3bbd3cc/Screenshot+2026-05-25+at+3.50.35%E2%80%AFPM.png"
-        alt="Life Flow" loading="lazy" />
-      <div class="artwork-info">
-        <div class="artwork-artist">Qinaus</div>
-        <div class="artwork-title">Life Flow</div>
-        <div class="artwork-meta">Oil on Canvas · 2025</div>
+  <div class="works-grid">
+    <a class="work-card" href="/human-artark/artists/kai-nakamura/">
+      <div class="work-img-wrap">
+        <img class="work-img" src="https://picsum.photos/seed/knakamura-fog1/400/530" alt="Fog Series I" loading="lazy" />
+      </div>
+      <div class="work-info">
+        <div>
+          <div class="work-artist">Kai Nakamura</div>
+          <div class="work-title">Fog Series I</div>
+          <div class="work-medium">Archival pigment print · 2025</div>
+        </div>
+        <div>
+          <div class="work-price">$1,200</div>
+          <span class="work-buy">Inquire</span>
+        </div>
       </div>
     </a>
-    <a href="artists/qinaus/" class="artwork-item">
-      <img class="artwork-img"
-        src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/985223bb-73a4-41bc-a85f-83d4c9865601/Screenshot+2026-05-25+at+6.31.41%E2%80%AFPM.png"
-        alt="Crimson" loading="lazy" />
-      <div class="artwork-info">
-        <div class="artwork-artist">Qinaus</div>
-        <div class="artwork-title">Crimson</div>
-        <div class="artwork-meta">Oil on Canvas · 2025 · Multi-panel</div>
+    <a class="work-card" href="/human-artark/artists/sofia-reyes/">
+      <div class="work-img-wrap">
+        <img class="work-img" src="https://picsum.photos/seed/sreyes-figura1/400/530" alt="Figura I" loading="lazy" />
+      </div>
+      <div class="work-info">
+        <div>
+          <div class="work-artist">Sofia Reyes</div>
+          <div class="work-title">Figura I</div>
+          <div class="work-medium">Oil on canvas · 2026</div>
+        </div>
+        <div>
+          <div class="work-price">$2,800</div>
+          <span class="work-buy">Inquire</span>
+        </div>
       </div>
     </a>
-    <a href="artists/qinaus/" class="artwork-item">
-      <img class="artwork-img"
-        src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/8e73c17b-6d9b-4998-871a-31247bb146e0/Smartist_1D46CCCA-72C7-407A-B6FF-6DFE1D96D48E.png"
-        alt="Roofwalker" loading="lazy" />
-      <div class="artwork-info">
-        <div class="artwork-artist">Qinaus</div>
-        <div class="artwork-title">Roofwalker</div>
-        <div class="artwork-meta">Oil on Canvas · 2026</div>
+    <a class="work-card" href="/human-artark/artists/amara-diallo/">
+      <div class="work-img-wrap">
+        <img class="work-img" src="https://picsum.photos/seed/adiallo-woven/400/530" alt="Woven Tension" loading="lazy" />
+      </div>
+      <div class="work-info">
+        <div>
+          <div class="work-artist">Amara Diallo</div>
+          <div class="work-title">Woven Tension</div>
+          <div class="work-medium">Mixed media sculpture · 2025</div>
+        </div>
+        <div>
+          <div class="work-price">$4,500</div>
+          <span class="work-buy">Inquire</span>
+        </div>
+      </div>
+    </a>
+    <a class="work-card" href="/human-artark/artists/mei-lin-zhang/">
+      <div class="work-img-wrap">
+        <img class="work-img" src="https://picsum.photos/seed/mlzhang-vessel/400/530" alt="Ash Vessel I" loading="lazy" />
+      </div>
+      <div class="work-info">
+        <div>
+          <div class="work-artist">Mei Lin Zhang</div>
+          <div class="work-title">Ash Vessel I</div>
+          <div class="work-medium">Stoneware, ash glaze · 2026</div>
+        </div>
+        <div>
+          <div class="work-price">$950</div>
+          <span class="work-buy">Inquire</span>
+        </div>
       </div>
     </a>
   </div>
 </div>
 
 <!-- HOW IT WORKS -->
-<div class="how">
-  <div class="how-step">
-    <p class="how-num">Step 01</p>
-    <h3 class="how-title">Build your artist profile</h3>
-    <p class="how-body">
-      Upload your works, write your statement, add your CV and exhibition history. Your profile becomes a permanent, shareable page — the professional record galleries expect before they say yes.
-    </p>
+<div>
+  <div class="section-header">
+    <h2 class="section-title">How it works</h2>
   </div>
-  <div class="how-step">
-    <p class="how-num">Step 02</p>
-    <h3 class="how-title">Find galleries with open calls</h3>
-    <p class="how-body">
-      Our database covers 70+ Bay Area galleries — updated weekly by scraping websites and parsing newsletters. See exactly who is accepting submissions, what they're looking for, and when the deadline is.
-    </p>
-  </div>
-  <div class="how-step">
-    <p class="how-num">Step 03</p>
-    <h3 class="how-title">Apply with one click</h3>
-    <p class="how-body">
-      Select a gallery, write a short note, and send. Your profile is attached automatically. We handle the outreach on your behalf and track the status of every application in one place.
-    </p>
-  </div>
-</div>
-
-<!-- ARTIST FEATURE -->
-<div class="feature">
-  <div class="feature-image">
-    <img
-      src="https://images.squarespace-cdn.com/content/v1/6a14ca8d2ea87702531db180/1bd46b8e-cb56-40a3-a3ed-2a4e8bf20387/Screenshot+2026-05-25+at+7.33.41%E2%80%AFPM.png"
-      alt="Always By Your Side — Qinaus" loading="lazy" />
-  </div>
-  <div class="feature-content">
-    <p class="feature-label">Featured Artist</p>
-    <h2 class="feature-name">Qinaus</h2>
-    <p class="feature-role">Contemporary Oil Painter · San Francisco, CA</p>
-    <blockquote class="feature-quote">
-      "What can only be seen from the threshold?"
-    </blockquote>
-    <div class="feature-cv">
-      <div class="feature-cv-item">
-        <span class="feature-cv-year">2026</span>
-        <span class="feature-cv-text"><em>Life Flow,</em> New York Design Week Group Exhibition</span>
-      </div>
-      <div class="feature-cv-item">
-        <span class="feature-cv-year">2026</span>
-        <span class="feature-cv-text"><em>Whispers of the Heartsea,</em> Pacific Art League, Palo Alto</span>
-      </div>
-      <div class="feature-cv-item">
-        <span class="feature-cv-year">2026–</span>
-        <span class="feature-cv-text">Studio, SF Artists Studios, Dogpatch / American Industrial Center</span>
-      </div>
+  <div class="how">
+    <div class="how-step">
+      <p class="how-num">01 — Profile</p>
+      <h3 class="how-title">Build your artist profile</h3>
+      <p class="how-body">Upload works, write your statement, add CV and exhibition history. Your profile is a permanent, shareable page — the professional record galleries expect before they say yes.</p>
     </div>
-    <a class="btn-primary" href="artists/qinaus/">View Full Profile</a>
+    <div class="how-step">
+      <p class="how-num">02 — Discover</p>
+      <h3 class="how-title">Find open calls & residencies</h3>
+      <p class="how-body">Our database covers galleries and residencies globally — updated continuously. Filter by medium, region, deadline, and type to find the right fit.</p>
+    </div>
+    <div class="how-step">
+      <p class="how-num">03 — Apply</p>
+      <h3 class="how-title">Apply with one click</h3>
+      <p class="how-body">Select a gallery or residency, write a short note, and send. Your profile is attached automatically. Track every application in one dashboard.</p>
+    </div>
+    <div class="how-step">
+      <p class="how-num">04 — Sell</p>
+      <h3 class="how-title">Sell works directly</h3>
+      <p class="how-body">List works for sale on your profile. Collectors discover and purchase directly — no gallery commission, no intermediary. You keep 100% of what you earn.</p>
+    </div>
   </div>
 </div>
 
-<!-- GALLERIES -->
+<!-- ARTISTS STRIP -->
+<div>
+  <div class="section-header">
+    <h2 class="section-title">Artists on the platform</h2>
+    <a class="section-link" href="/human-artark/artists/">View all →</a>
+  </div>
+  <div class="artists-strip">
+    <a class="artist-chip" href="/human-artark/artists/kai-nakamura/">
+      <div class="chip-img-wrap"><img class="chip-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&h=450&q=80" alt="Kai Nakamura" loading="lazy" /></div>
+      <div class="chip-info"><div class="chip-name">Kai Nakamura</div><div class="chip-medium">Photography</div></div>
+    </a>
+    <a class="artist-chip" href="/human-artark/artists/amara-diallo/">
+      <div class="chip-img-wrap"><img class="chip-img" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=300&h=450&q=80" alt="Amara Diallo" loading="lazy" /></div>
+      <div class="chip-info"><div class="chip-name">Amara Diallo</div><div class="chip-medium">Installation</div></div>
+    </a>
+    <a class="artist-chip" href="/human-artark/artists/sofia-reyes/">
+      <div class="chip-img-wrap"><img class="chip-img" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&h=450&q=80" alt="Sofia Reyes" loading="lazy" /></div>
+      <div class="chip-info"><div class="chip-name">Sofia Reyes</div><div class="chip-medium">Painting</div></div>
+    </a>
+    <a class="artist-chip" href="/human-artark/artists/theo-okafor/">
+      <div class="chip-img-wrap"><img class="chip-img" src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&h=450&q=80" alt="Theo Okafor" loading="lazy" /></div>
+      <div class="chip-info"><div class="chip-name">Theo Okafor</div><div class="chip-medium">Video · Performance</div></div>
+    </a>
+    <a class="artist-chip" href="/human-artark/artists/hannah-weiss/">
+      <div class="chip-img-wrap"><img class="chip-img" src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=300&h=450&q=80" alt="Hannah Weiss" loading="lazy" /></div>
+      <div class="chip-info"><div class="chip-name">Hannah Weiss</div><div class="chip-medium">Printmaking</div></div>
+    </a>
+    <a class="artist-chip" href="/human-artark/artists/james-park/">
+      <div class="chip-img-wrap"><img class="chip-img" src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=300&h=450&q=80" alt="James Park" loading="lazy" /></div>
+      <div class="chip-info"><div class="chip-name">James Park</div><div class="chip-medium">Digital · New Media</div></div>
+    </a>
+    <a class="artist-chip" href="/human-artark/artists/mei-lin-zhang/">
+      <div class="chip-img-wrap"><img class="chip-img" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=300&h=450&q=80" alt="Mei Lin Zhang" loading="lazy" /></div>
+      <div class="chip-info"><div class="chip-name">Mei Lin Zhang</div><div class="chip-medium">Ceramics</div></div>
+    </a>
+  </div>
+</div>
+
+<!-- GALLERIES PREVIEW -->
 <div class="galleries-section">
   <div class="section-header">
-    <h2 class="section-title">Bay Area galleries</h2>
-    <a class="section-link" href="galleries/">View all 70+ galleries</a>
+    <h2 class="section-title">Partner galleries</h2>
+    <a class="section-link" href="/human-artark/galleries/">View all 70+ →</a>
   </div>
   <div class="galleries-list">
-    <div class="gallery-row" onclick="location.href='apply/?gallery=Minnesota Street Project'">
+    <div class="gallery-row" onclick="location.href='/human-artark/apply/?gallery=Minnesota Street Project'">
       <div class="gallery-dot open"></div>
       <span class="gallery-row-name">Minnesota Street Project</span>
       <span class="gallery-row-region">San Francisco · Dogpatch</span>
       <span class="gallery-row-apply">Apply</span>
     </div>
-    <div class="gallery-row" onclick="location.href='apply/?gallery=City Art Gallery'">
-      <div class="gallery-dot open"></div>
-      <span class="gallery-row-name">City Art Gallery</span>
-      <span class="gallery-row-region">San Francisco · Castro</span>
-      <span class="gallery-row-apply">Apply</span>
-    </div>
-    <div class="gallery-row" onclick="location.href='apply/?gallery=Mercury 20 Gallery'">
+    <div class="gallery-row" onclick="location.href='/human-artark/apply/?gallery=Mercury 20 Gallery'">
       <div class="gallery-dot open"></div>
       <span class="gallery-row-name">Mercury 20 Gallery</span>
       <span class="gallery-row-region">Oakland · Uptown</span>
       <span class="gallery-row-apply">Apply</span>
     </div>
-    <div class="gallery-row" onclick="location.href='apply/?gallery=Gray Loft Gallery'">
+    <div class="gallery-row" onclick="location.href='/human-artark/apply/?gallery=Gray Loft Gallery'">
       <div class="gallery-dot open"></div>
       <span class="gallery-row-name">Gray Loft Gallery</span>
       <span class="gallery-row-region">Oakland · Jingletown</span>
       <span class="gallery-row-apply">Apply</span>
     </div>
-    <div class="gallery-row" onclick="location.href='apply/?gallery=Berkeley Art Center'">
+    <div class="gallery-row" onclick="location.href='/human-artark/apply/?gallery=Berkeley Art Center'">
       <div class="gallery-dot open"></div>
       <span class="gallery-row-name">Berkeley Art Center</span>
       <span class="gallery-row-region">East Bay · Berkeley</span>
       <span class="gallery-row-apply">Apply</span>
     </div>
-    <div class="gallery-row" onclick="location.href='apply/?gallery=ARC Gallery'">
+    <div class="gallery-row" onclick="location.href='/human-artark/apply/?gallery=ARC Gallery'">
       <div class="gallery-dot open"></div>
       <span class="gallery-row-name">ARC Gallery</span>
       <span class="gallery-row-region">San Francisco · SoMa</span>
       <span class="gallery-row-apply">Apply</span>
     </div>
-    <div class="gallery-row" onclick="location.href='galleries/'">
+    <div class="gallery-row" onclick="location.href='/human-artark/apply/?gallery=Kala Art Institute'">
+      <div class="gallery-dot open"></div>
+      <span class="gallery-row-name">Kala Art Institute</span>
+      <span class="gallery-row-region">East Bay · Berkeley</span>
+      <span class="gallery-row-apply">Apply</span>
+    </div>
+    <div class="gallery-row" onclick="location.href='/human-artark/galleries/'">
       <div class="gallery-dot closed"></div>
       <span class="gallery-row-name">Catharine Clark Gallery</span>
       <span class="gallery-row-region">San Francisco · SoMa</span>
       <span class="gallery-row-apply">View</span>
     </div>
-    <div class="gallery-row" onclick="location.href='galleries/'">
+    <div class="gallery-row" onclick="location.href='/human-artark/galleries/'">
       <div class="gallery-dot closed"></div>
       <span class="gallery-row-name">Romer Young Gallery</span>
       <span class="gallery-row-region">San Francisco · Dogpatch</span>
@@ -751,7 +575,7 @@ img { display: block; max-width: 100%; }
     </div>
   </div>
   <div class="galleries-footer">
-    <a class="btn-text" href="galleries/">Browse all galleries →</a>
+    <a class="btn-text" href="/human-artark/galleries/">Browse all galleries →</a>
   </div>
 </div>
 
@@ -759,15 +583,19 @@ img { display: block; max-width: 100%; }
 <div class="stats-band">
   <div class="stat-col">
     <div class="stat-number">70+</div>
-    <p class="stat-desc">Bay Area galleries tracked across San Francisco, East Bay, Peninsula, and South Bay — updated every week.</p>
+    <p class="stat-desc">Partner galleries tracked across the Bay Area — expanding globally in 2026.</p>
   </div>
   <div class="stat-col">
     <div class="stat-number">22</div>
-    <p class="stat-desc">Galleries currently accepting submissions or open calls, as of this week's automated scan.</p>
+    <p class="stat-desc">Galleries currently accepting submissions, updated automatically every week.</p>
   </div>
   <div class="stat-col">
-    <div class="stat-number">1</div>
-    <p class="stat-desc">Profile. Every artist on Human ArtArk has one permanent, gallery-ready page that travels with every application.</p>
+    <div class="stat-number">∞</div>
+    <p class="stat-desc">Residency opportunities worldwide — from weekend intensives to year-long studio programs.</p>
+  </div>
+  <div class="stat-col">
+    <div class="stat-number">0%</div>
+    <p class="stat-desc">Commission on direct sales. Artists keep 100% of every transaction between them and a collector.</p>
   </div>
 </div>
 
@@ -775,24 +603,42 @@ img { display: block; max-width: 100%; }
 <div class="manifesto">
   <div class="manifesto-body">
     <p>
-      The art world has always had gatekeepers. That is not the problem. The problem is opacity — artists who don't know which doors to knock on, galleries that miss the work they would have shown if only someone had made the introduction.
+      The art world has always had gatekeepers. That is not the problem. The problem is opacity — artists who don't know which doors to knock on, institutions that miss the work they would have championed if only someone had made the introduction.
     </p>
     <p>
-      Human ArtArk is not a marketplace. It is not a social network. It is infrastructure: a clear, maintained record of who is showing what, who is accepting submissions, and what a rigorous artist profile looks like. The rest is up to the work.
+      Human ArtArk is infrastructure. A maintained record of who is showing what, who is accepting submissions, where residencies are opening, and what a rigorous artist profile looks like. We do not curate. We connect.
     </p>
     <p>
-      We exist because human-made art matters — not as a category, but as the evidence of a specific consciousness at a specific moment in time. That is irreplaceable. And it deserves to be seen.
+      We exist because human-made art matters — not as a category, but as the irreplaceable evidence of a specific consciousness at a specific moment in time. That deserves to be seen. Everywhere.
     </p>
   </div>
-  <p class="manifesto-sig">Human ArtArk · Est. 2026 · San Francisco</p>
+  <p class="manifesto-sig">Human ArtArk · Est. 2026 · Global</p>
+</div>
+
+<!-- CTA BAND -->
+<div class="cta-band">
+  <div class="cta-half">
+    <p class="cta-label">For Artists</p>
+    <h2 class="cta-title">Build your profile.<br>Get seen.</h2>
+    <p class="cta-body">Create a gallery-ready profile in minutes. Browse open calls, apply to residencies, and sell your work — all from one place.</p>
+    <a class="btn-primary" href="/human-artark/apply/">Join as an Artist</a>
+  </div>
+  <div class="cta-half">
+    <p class="cta-label">For Galleries & Collectors</p>
+    <h2 class="cta-title">Discover the work<br>that matters.</h2>
+    <p class="cta-body">Browse 100+ artist profiles across every medium. Contact artists directly, acquire works, and list open calls that reach the right people.</p>
+    <a class="btn-primary" href="/human-artark/artists/">Browse Artists</a>
+  </div>
 </div>
 
 <!-- FOOTER -->
 <footer class="footer">
   <span class="footer-logo">Human ArtArk</span>
-  <a class="footer-link" href="galleries/">Galleries</a>
-  <a class="footer-link" href="artists/qinaus/">Artists</a>
-  <a class="footer-link" href="apply/">Apply</a>
+  <div class="footer-links">
+    <a href="/human-artark/galleries/">Galleries</a>
+    <a href="/human-artark/artists/">Artists</a>
+    <a href="/human-artark/apply/">Apply</a>
+  </div>
 </footer>
 
 </body>
